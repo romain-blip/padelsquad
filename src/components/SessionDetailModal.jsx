@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useAuth } from '../lib/auth'
 import { useToast } from '../lib/toast'
-import { updatePlayerStatus, getMessages, sendMessage, subscribeToMessages, deleteSession, updateSession } from '../lib/db'
+import { updatePlayerStatus, getMessages, sendMessage, subscribeToMessages, deleteSession, updateSession, leaveSession } from '../lib/db'
 import { notifyFirstMessage } from '../lib/notifications'
 import { formatDate, DURATIONS, TIME_SLOTS } from '../lib/constants'
 import { Modal, Spinner } from './UI'
@@ -180,6 +180,24 @@ export default function SessionDetailModal({ session, onClose, onRefresh, defaul
                 </div>
               </div>
             ))}
+
+            {/* Leave session button (for non-creators who are accepted) */}
+            {!isCreator && myStatus === 'accepted' && (
+              <button onClick={async () => {
+                try {
+                  await leaveSession(session.id, user.id)
+                  showToast('Tu as quitté la session')
+                  onRefresh?.()
+                  onClose()
+                } catch (err) { showToast('Erreur: ' + err.message, 'error') }
+              }} style={{
+                width: '100%', marginTop: 16, padding: '12px', borderRadius: 12,
+                border: '2px solid #FECACA', background: '#FEF2F2',
+                color: '#DC2626', fontSize: 13, fontWeight: 700, cursor: 'pointer',
+              }}>
+                Quitter la session
+              </button>
+            )}
           </div>
         )}
 

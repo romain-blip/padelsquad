@@ -3,8 +3,8 @@ import { useAuth } from '../lib/auth'
 import { Spinner } from './UI'
 
 export default function AuthPage() {
-  const { signIn, signUp, signInWithGoogle } = useAuth()
-  const [mode, setMode] = useState('login') // login | signup
+  const { signIn, signUp, signInWithGoogle, resetPassword } = useAuth()
+  const [mode, setMode] = useState('login') // login | signup | forgot
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
@@ -18,7 +18,10 @@ export default function AuthPage() {
     setLoading(true)
 
     try {
-      if (mode === 'signup') {
+      if (mode === 'forgot') {
+        await resetPassword(email)
+        setSuccess('Lien de réinitialisation envoyé ! Check tes mails 📧')
+      } else if (mode === 'signup') {
         await signUp(email, password)
         setSuccess('Check tes mails pour confirmer ton compte ! 📧')
       } else {
@@ -130,13 +133,22 @@ export default function AuthPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                required
+                required={mode !== 'forgot'}
                 minLength={6}
                 style={{
                   width: '100%', padding: '11px 14px', borderRadius: 10,
                   border: '1px solid #e0e0e0', fontSize: 15,
+                  display: mode === 'forgot' ? 'none' : 'block',
                 }}
               />
+              {mode === 'login' && (
+                <button type="button" onClick={() => { setMode('forgot'); setError(null); setSuccess(null) }} style={{
+                  background: 'none', border: 'none', color: 'var(--color-accent)',
+                  fontSize: 12, fontWeight: 600, cursor: 'pointer', marginTop: 6, padding: 0,
+                }}>
+                  Mot de passe oublié ?
+                </button>
+              )}
             </div>
 
             {error && (
@@ -169,8 +181,18 @@ export default function AuthPage() {
               }}
             >
               {loading && <Spinner size={18} />}
-              {mode === 'login' ? 'Se connecter' : "S'inscrire"}
+              {mode === 'login' ? 'Se connecter' : mode === 'signup' ? "S'inscrire" : 'Envoyer le lien'}
             </button>
+
+            {mode === 'forgot' && (
+              <button type="button" onClick={() => { setMode('login'); setError(null); setSuccess(null) }} style={{
+                width: '100%', marginTop: 10, padding: '10px', background: 'none',
+                border: 'none', color: 'var(--color-muted)', fontSize: 13,
+                fontWeight: 600, cursor: 'pointer',
+              }}>
+                ← Retour à la connexion
+              </button>
+            )}
           </form>
 
           {/* Divider */}

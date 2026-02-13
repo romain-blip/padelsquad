@@ -77,6 +77,13 @@ export function AuthProvider({ children }) {
     setProfile(null)
   }
 
+  async function resetPassword(email) {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin,
+    })
+    if (error) throw error
+  }
+
   async function updateProfile(updates) {
     if (!user) return
     const profileData = { id: user.id, ...updates, updated_at: new Date().toISOString() }
@@ -100,6 +107,7 @@ export function AuthProvider({ children }) {
     signIn,
     signInWithGoogle,
     signOut,
+    resetPassword,
     updateProfile,
     refreshProfile: () => user && fetchProfile(user.id),
   }

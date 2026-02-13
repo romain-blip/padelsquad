@@ -20,6 +20,7 @@ export default function ExplorePage() {
   const [loading, setLoading] = useState(true)
   const [filterDept, setFilterDept] = useState('')
   const [sortBy, setSortBy] = useState('date')
+  const [search, setSearch] = useState('')
 
   const [showCreate, setShowCreate] = useState(false)
   const [showDetail, setShowDetail] = useState(null)
@@ -48,11 +49,22 @@ export default function ExplorePage() {
   useEffect(() => { loadSessions() }, [loadSessions])
 
   const sortedSessions = useMemo(() => {
-    // Filter out full sessions (accepted players >= spots_total)
-    const available = sessions.filter(s => {
+    // Filter out full sessions
+    let available = sessions.filter(s => {
       const accepted = (s.session_players || []).filter(p => p.status === 'accepted' || !p.status)
       return accepted.length < s.spots_total
     })
+
+    // Search filter
+    if (search.trim()) {
+      const q = search.toLowerCase()
+      available = available.filter(s =>
+        s.city?.toLowerCase().includes(q) ||
+        s.club?.toLowerCase().includes(q) ||
+        s.creator?.name?.toLowerCase().includes(q) ||
+        s.dept?.toLowerCase().includes(q)
+      )
+    }
 
     if (sortBy !== 'distance' || !geoPosition) return available
     return [...available].sort((a, b) => {
@@ -63,7 +75,7 @@ export default function ExplorePage() {
       if (dB === null) return -1
       return dA - dB
     })
-  }, [sessions, sortBy, geoPosition])
+  }, [sessions, sortBy, geoPosition, search])
 
   async function handleCreate(form) {
     try {
@@ -119,6 +131,31 @@ export default function ExplorePage() {
           <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 13, margin: '0 0 18px', fontWeight: 500 }}>
             Il manque toujours quelqu'un. Plus maintenant. 🎾
           </p>
+
+          {/* Search */}
+          <div style={{
+            background: 'rgba(255,255,255,0.08)', borderRadius: 14,
+            padding: '2px 16px', display: 'flex', alignItems: 'center', gap: 10,
+            border: '1px solid rgba(255,255,255,0.06)',
+          }}>
+            <span style={{ fontSize: 14, opacity: 0.4 }}>🔍</span>
+            <input
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder="Ville, club, joueur..."
+              style={{
+                flex: 1, background: 'none', border: 'none', color: 'white',
+                fontSize: 14, padding: '10px 0', outline: 'none',
+              }}
+            />
+            {search && (
+              <button onClick={() => setSearch('')} style={{
+                background: 'rgba(255,255,255,0.2)', border: 'none', borderRadius: '50%',
+                width: 20, height: 20, color: 'white', fontSize: 11, cursor: 'pointer',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>✕</button>
+            )}
+          </div>
         </div>
       </div>
 

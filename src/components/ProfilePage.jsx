@@ -3,11 +3,13 @@ import { useAuth } from '../lib/auth'
 import { getRankFromSessions, getLevelLabel } from '../lib/constants'
 import EditProfileModal from './EditProfileModal'
 import PlayerProfileModal from './PlayerProfileModal'
+import LegalModal from './LegalModal'
 
 export default function ProfilePage() {
   const { user, profile, signOut } = useAuth()
   const [showEdit, setShowEdit] = useState(false)
   const [showReviews, setShowReviews] = useState(false)
+  const [showLegal, setShowLegal] = useState(false)
 
   const rank = getRankFromSessions(profile?.sessions_played || 0)
 
@@ -83,6 +85,7 @@ export default function ProfilePage() {
           { icon: '📷', label: 'Changer ma photo', action: () => setShowEdit(true) },
           { icon: '🎯', label: `Type de jeu : ${profile?.play_style || 'Non défini'}`, action: () => setShowEdit(true) },
           { icon: '⭐', label: 'Mes avis', action: () => setShowReviews(true) },
+          { icon: '📄', label: 'Mentions légales', action: () => setShowLegal(true) },
           { icon: '🚪', label: 'Se déconnecter', danger: true, action: signOut },
         ].map((item, i) => (
           <div key={i} onClick={item.action} style={{
@@ -102,6 +105,7 @@ export default function ProfilePage() {
 
       {showEdit && <EditProfileModal onClose={() => setShowEdit(false)} />}
       {showReviews && <PlayerProfileModal playerId={user.id} onClose={() => setShowReviews(false)} />}
+      {showLegal && <LegalModal onClose={() => setShowLegal(false)} />}
     </>
   )
 }
