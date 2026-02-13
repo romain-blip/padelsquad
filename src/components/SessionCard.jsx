@@ -14,6 +14,10 @@ export default function SessionCard({ session, onJoin, onPlayerClick, onOpenDeta
   const pendingCount = players.filter(p => p.status === 'pending').length
   const isCreator = creator?.id === currentUserId || session.creator_id === currentUserId
 
+  // Average level of accepted players
+  const levelsArr = acceptedPlayers.map(p => p.player?.level_num).filter(Boolean)
+  const avgLevel = levelsArr.length > 0 ? Math.round(levelsArr.reduce((a, b) => a + b, 0) / levelsArr.length * 10) / 10 : null
+
   return (
     <div
       onMouseEnter={() => setHovered(true)}
@@ -102,6 +106,14 @@ export default function SessionCard({ session, onJoin, onPlayerClick, onOpenDeta
               fontSize: 12, fontWeight: 700, color: 'var(--color-leaf)',
             }}>
               {distance < 1 ? '< 1' : distance} km
+            </span>
+          )}
+          {avgLevel !== null && (
+            <span style={{
+              background: '#F3E8FF', padding: '5px 11px', borderRadius: 10,
+              fontSize: 12, fontWeight: 700, color: '#7C3AED',
+            }}>
+              Moy. {avgLevel}
             </span>
           )}
         </div>

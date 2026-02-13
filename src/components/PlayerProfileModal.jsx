@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../lib/auth'
 import { useToast } from '../lib/toast'
-import { getPlayerReviews, getPlayerRating, submitReview, getProfile } from '../lib/db'
+import { getPlayerReviews, getPlayerRating, submitReview, getProfile, havePlayedTogether } from '../lib/db'
 import { formatDate } from '../lib/constants'
 import { Modal, Stars, RatingBadge, LevelBadge, Spinner } from './UI'
 
@@ -16,6 +16,7 @@ export default function PlayerProfileModal({ playerId, onClose }) {
   const [reviewStars, setReviewStars] = useState(0)
   const [reviewText, setReviewText] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const [canReview, setCanReview] = useState(false)
 
   const isOwnProfile = user?.id === playerId
 
@@ -34,6 +35,12 @@ export default function PlayerProfileModal({ playerId, onClose }) {
       setPlayer(profileData)
       setReviews(reviewsData || [])
       setRating(ratingData)
+
+      // Check if current user has played with this player
+      if (!isOwnProfile && user?.id) {
+        const played = await havePlayedTogether(user.id, playerId)
+        setCanReview(played)
+      }
     } catch (err) {
       console.error(err)
     } finally {
@@ -87,18 +94,22 @@ export default function PlayerProfileModal({ playerId, onClose }) {
     <Modal onClose={onClose}>
       {/* Header */}
       <div style={{
-        background: 'linear-gradient(135deg, var(--color-dark) 0%, #2d2d5e 100%)',
-        padding: '28px 24px 20px', textAlign: 'center', position: 'relative',
-        borderRadius: '20px 20px 0 0',
+        background: 'var(--color-dark)', padding: '28px 24px 20px', textAlign: 'center',
+        position: 'relative', overflow: 'hidden', borderRadius: '20px 20px 0 0',
       }}>
-        <div style={{
-          width: 64, height: 64, borderRadius: '50%',
-          background: 'rgba(255,255,255,0.15)', border: '3px solid rgba(255,255,255,0.3)',
-          margin: '0 auto 12px', display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: 26, color: 'white', fontWeight: 700,
-        }}>
-          {player.name?.[0] || '?'}
-        </div>
+        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'var(--court-pattern)', opacity: 0.5 }} />
+        <div style={{ position: 'relative' }}>
+          <div style={{
+            width: 64, height: 64, borderRadius: '50%',
+            background: player.avatar_url
+              ? `url(${player.avatar_url}) center/cover`
+              : `hsl(${(player.name?.charCodeAt(0) || 0) * 7 % 360}, 42%, 52%)`,
+            border: '3px solid rgba(255,255,255,0.3)',
+            margin: '0 auto 12px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: 26, color: 'white', fontWeight: 700,
+          }}>
+            {!player.avatar_url && (player.name?.[0] || '?')}
+          </div>
         <h2 style={{ margin: 0, color: 'white', fontSize: 20, fontWeight: 700 }}>
           {player.name}
         </h2>
@@ -180,10 +191,17 @@ export default function PlayerProfileModal({ playerId, onClose }) {
         )}
       </div>
 
-      {/* Leave review (not for own profile) */}
+      {/* Leave review (only if played together) */}
       {!isOwnProfile && (
         <div style={{ padding: '12px 24px 20px', borderTop: '1px solid #f0f0f0' }}>
-          {!showReviewForm ? (
+          {!canReview ? (
+            <p style={{
+              textAlign: 'center', fontSize: 12, color: 'var(--color-muted)',
+              padding: '8px 0', fontStyle: 'italic',
+            }}>
+              🎾 Joue avec ce joueur pour pouvoir laisser un avis
+            </p>
+          ) : !showReviewForm ? (
             <button onClick={() => setShowReviewForm(true)} style={{
               width: '100%', padding: '12px', background: '#f8f7f4',
               border: '1px solid #e8e8e8', borderRadius: 10,

@@ -181,6 +181,38 @@ export function subscribeToMessages(sessionId, callback) {
 // REVIEWS
 // ============================================================
 
+// Check if two players have been in the same past session (both accepted)
+export async function havePlayedTogether(userId, otherUserId) {
+  const today = new Date()
+  const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`
+
+  // Get sessions where user was accepted
+  const { data: mySessions } = await supabase
+    .from('session_players')
+    .select('session_id, session:sessions(date)')
+    .eq('player_id', userId)
+    .eq('status', 'accepted')
+
+  if (!mySessions || mySessions.length === 0) return false
+
+  // Filter past sessions
+  const pastSessionIds = mySessions
+    .filter(sp => sp.session?.date && sp.session.date < todayStr)
+    .map(sp => sp.session_id)
+
+  if (pastSessionIds.length === 0) return false
+
+  // Check if other user was accepted in any of those past sessions
+  const { data: shared } = await supabase
+    .from('session_players')
+    .select('session_id')
+    .eq('player_id', otherUserId)
+    .eq('status', 'accepted')
+    .in('session_id', pastSessionIds)
+
+  return shared && shared.length > 0
+}
+
 export async function getPlayerReviews(playerId) {
   const { data, error } = await supabase
     .from('reviews')
