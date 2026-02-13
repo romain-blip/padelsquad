@@ -78,6 +78,27 @@ export async function createSession({ city, club, date, time, level, dept, creat
   return data
 }
 
+export async function updateSession(sessionId, updates) {
+  const { data, error } = await supabase
+    .from('sessions')
+    .update(updates)
+    .eq('id', sessionId)
+    .select()
+    .single()
+
+  if (error) throw error
+  return data
+}
+
+export async function deleteSession(sessionId) {
+  const { error } = await supabase
+    .from('sessions')
+    .delete()
+    .eq('id', sessionId)
+
+  if (error) throw error
+}
+
 export async function joinSession(sessionId, playerId, isCreator = false) {
   const { error } = await supabase
     .from('session_players')

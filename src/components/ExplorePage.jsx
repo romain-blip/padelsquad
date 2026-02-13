@@ -48,8 +48,14 @@ export default function ExplorePage() {
   useEffect(() => { loadSessions() }, [loadSessions])
 
   const sortedSessions = useMemo(() => {
-    if (sortBy !== 'distance' || !geoPosition) return sessions
-    return [...sessions].sort((a, b) => {
+    // Filter out full sessions (accepted players >= spots_total)
+    const available = sessions.filter(s => {
+      const accepted = (s.session_players || []).filter(p => p.status === 'accepted' || !p.status)
+      return accepted.length < s.spots_total
+    })
+
+    if (sortBy !== 'distance' || !geoPosition) return available
+    return [...available].sort((a, b) => {
       const dA = getDistanceKm(geoPosition.lat, geoPosition.lng, a.latitude, a.longitude)
       const dB = getDistanceKm(geoPosition.lat, geoPosition.lng, b.latitude, b.longitude)
       if (dA === null && dB === null) return 0

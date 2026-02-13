@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
 import { useAuth } from '../lib/auth'
 import { useToast } from '../lib/toast'
-import { updatePlayerStatus, getMessages, sendMessage, subscribeToMessages } from '../lib/db'
+import { updatePlayerStatus, getMessages, sendMessage, subscribeToMessages, deleteSession, updateSession } from '../lib/db'
 import { notifyFirstMessage } from '../lib/notifications'
-import { formatDate } from '../lib/constants'
+import { formatDate, DURATIONS, TIME_SLOTS } from '../lib/constants'
 import { Modal, Spinner } from './UI'
 
 export default function SessionDetailModal({ session, onClose, onRefresh, defaultTab }) {
@@ -14,6 +14,15 @@ export default function SessionDetailModal({ session, onClose, onRefresh, defaul
   const [newMsg, setNewMsg] = useState('')
   const [loadingChat, setLoadingChat] = useState(false)
   const [sendingMsg, setSendingMsg] = useState(false)
+  const [confirmDelete, setConfirmDelete] = useState(false)
+  const [editForm, setEditForm] = useState({
+    city: session.city || '',
+    club: session.club || '',
+    date: session.date || '',
+    time: session.time || '',
+    duration: session.duration || 90,
+  })
+  const [saving, setSaving] = useState(false)
   const chatEndRef = useRef(null)
   const channelRef = useRef(null)
 
@@ -71,6 +80,32 @@ export default function SessionDetailModal({ session, onClose, onRefresh, defaul
     catch (err) { showToast('Erreur: ' + err.message, 'error') }
   }
 
+  async function handleDelete() {
+    try {
+      await deleteSession(session.id)
+      showToast('Session supprimée')
+      onRefresh?.()
+      onClose()
+    } catch (err) { showToast('Erreur: ' + err.message, 'error') }
+  }
+
+  async function handleSaveEdit() {
+    setSaving(true)
+    try {
+      await updateSession(session.id, {
+        city: editForm.city,
+        club: editForm.club,
+        date: editForm.date,
+        time: editForm.time,
+        duration: editForm.duration,
+      })
+      showToast('Session modifiée ✓')
+      onRefresh?.()
+      setTab('players')
+    } catch (err) { showToast('Erreur: ' + err.message, 'error') }
+    finally { setSaving(false) }
+  }
+
   return (
     <Modal onClose={onClose}>
       {/* Header */}
@@ -102,6 +137,7 @@ export default function SessionDetailModal({ session, onClose, onRefresh, defaul
               { id: 'players', label: `Joueurs (${accepted.length}/${session.spots_total})`, show: true },
               { id: 'pending', label: `Demandes (${pending.length})`, show: isCreator && pending.length > 0 },
               { id: 'chat', label: '💬 Chat', show: canChat },
+              { id: 'edit', label: '✏️ Modifier', show: isCreator },
             ].filter(t => t.show).map(t => (
               <button key={t.id} onClick={() => setTab(t.id)} style={{
                 padding: '8px 14px', borderRadius: '10px 10px 0 0', border: 'none',
@@ -246,6 +282,114 @@ export default function SessionDetailModal({ session, onClose, onRefresh, defaul
                 boxShadow: newMsg.trim() ? '0 4px 14px rgba(232,106,58,0.3)' : 'none',
                 fontSize: 16,
               }}>{sendingMsg ? '...' : '→'}</button>
+            </div>
+          </div>
+        )}
+
+        {/* Edit tab (creator only) */}
+        {tab === 'edit' && isCreator && (
+          <div style={{ padding: '20px 24px' }}>
+            {/* Edit fields */}
+            {[
+              { key: 'city', label: 'Ville', type: 'text' },
+              { key: 'club', label: 'Club / Terrain', type: 'text' },
+              { key: 'date', label: 'Date', type: 'date' },
+            ].map(f => (
+              <div key={f.key} style={{ marginBottom: 14 }}>
+                <label style={{
+                  display: 'block', fontSize: 11, fontWeight: 700, color: 'var(--color-muted)',
+                  marginBottom: 5, textTransform: 'uppercase', letterSpacing: 0.5,
+                }}>{f.label}</label>
+                <input type={f.type} value={editForm[f.key]}
+                  onChange={e => setEditForm({ ...editForm, [f.key]: e.target.value })}
+                  style={{
+                    width: '100%', padding: '10px 14px', borderRadius: 12,
+                    border: '1.5px solid var(--color-sand)', fontSize: 14, background: 'var(--color-bg)',
+                  }}
+                />
+              </div>
+            ))}
+
+            <div style={{ display: 'flex', gap: 10, marginBottom: 14 }}>
+              <div style={{ flex: 1 }}>
+                <label style={{
+                  display: 'block', fontSize: 11, fontWeight: 700, color: 'var(--color-muted)',
+                  marginBottom: 5, textTransform: 'uppercase', letterSpacing: 0.5,
+                }}>Heure</label>
+                <select value={editForm.time} onChange={e => setEditForm({ ...editForm, time: e.target.value })}
+                  style={{
+                    width: '100%', padding: '10px 14px', borderRadius: 12,
+                    border: '1.5px solid var(--color-sand)', fontSize: 14, background: 'var(--color-bg)',
+                  }}>
+                  {TIME_SLOTS.map(t => <option key={t} value={t}>{t}</option>)}
+                </select>
+              </div>
+              <div style={{ flex: 1 }}>
+                <label style={{
+                  display: 'block', fontSize: 11, fontWeight: 700, color: 'var(--color-muted)',
+                  marginBottom: 5, textTransform: 'uppercase', letterSpacing: 0.5,
+                }}>Durée</label>
+                <div style={{ display: 'flex', gap: 6 }}>
+                  {DURATIONS.map(d => (
+                    <button key={d.value} onClick={() => setEditForm({ ...editForm, duration: d.value })} style={{
+                      flex: 1, padding: '10px', borderRadius: 10, border: 'none',
+                      background: editForm.duration === d.value ? 'var(--color-dark)' : 'var(--color-sand)',
+                      color: editForm.duration === d.value ? 'white' : 'var(--color-muted)',
+                      fontSize: 13, fontWeight: 700, cursor: 'pointer',
+                    }}>{d.label}</button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Save button */}
+            <button onClick={handleSaveEdit} disabled={saving} style={{
+              width: '100%', padding: '14px', borderRadius: 14, border: 'none',
+              background: 'var(--color-dark)', color: 'white',
+              fontSize: 15, fontWeight: 700, cursor: 'pointer', marginBottom: 16,
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+            }}>
+              {saving && <Spinner size={16} />}
+              Enregistrer les modifications ✓
+            </button>
+
+            {/* Danger zone */}
+            <div style={{
+              borderTop: '1px solid var(--color-sand)', paddingTop: 16,
+            }}>
+              {!confirmDelete ? (
+                <button onClick={() => setConfirmDelete(true)} style={{
+                  width: '100%', padding: '14px', borderRadius: 14,
+                  border: '2px solid #FECACA', background: '#FEF2F2',
+                  color: '#DC2626', fontSize: 14, fontWeight: 700, cursor: 'pointer',
+                }}>
+                  🗑️ Supprimer la session
+                </button>
+              ) : (
+                <div style={{
+                  background: '#FEF2F2', borderRadius: 14, padding: 16,
+                  border: '2px solid #FECACA', textAlign: 'center',
+                }}>
+                  <p style={{ fontSize: 14, fontWeight: 700, color: '#DC2626', margin: '0 0 12px' }}>
+                    Vraiment supprimer cette session ?
+                  </p>
+                  <p style={{ fontSize: 12, color: '#999', margin: '0 0 14px' }}>
+                    Tous les joueurs seront retirés et le chat supprimé.
+                  </p>
+                  <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
+                    <button onClick={() => setConfirmDelete(false)} style={{
+                      padding: '10px 20px', borderRadius: 10, border: 'none',
+                      background: 'var(--color-sand)', color: 'var(--color-dark)',
+                      fontSize: 13, fontWeight: 600, cursor: 'pointer',
+                    }}>Annuler</button>
+                    <button onClick={handleDelete} style={{
+                      padding: '10px 20px', borderRadius: 10, border: 'none',
+                      background: '#DC2626', color: 'white',
+                      fontSize: 13, fontWeight: 700, cursor: 'pointer',
+                    }}>Confirmer la suppression</button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         )}
