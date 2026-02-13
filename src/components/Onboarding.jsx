@@ -7,7 +7,7 @@ import { Spinner } from './UI'
 import CityInput from './CityInput'
 
 export default function Onboarding() {
-  const { user, updateProfile } = useAuth()
+  const { user, updateProfile, signOut } = useAuth()
   const { showToast } = useToast()
   const [step, setStep] = useState(0)
   const [name, setName] = useState('')
@@ -307,6 +307,16 @@ export default function Onboarding() {
       display: 'flex', flexDirection: 'column', alignItems: 'center',
       justifyContent: 'center', padding: 24,
     }}>
+      {/* Logout button */}
+      <button onClick={signOut} style={{
+        position: 'absolute', top: 16, right: 16,
+        background: '#f5f5f5', border: 'none', borderRadius: 8,
+        padding: '8px 14px', fontSize: 12, fontWeight: 600,
+        color: '#999', cursor: 'pointer',
+      }}>
+        Se déconnecter
+      </button>
+
       <div style={{ width: '100%', maxWidth: 400 }}>
         {/* Progress */}
         <div style={{ display: 'flex', gap: 6, marginBottom: 32, justifyContent: 'center' }}>

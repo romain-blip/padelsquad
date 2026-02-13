@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { formatDate } from '../lib/constants'
 import { LevelBadge, RatingBadge } from './UI'
 
-export default function SessionCard({ session, onJoin, onPlayerClick, delay = 0, isJoined, currentUserId, distance }) {
+export default function SessionCard({ session, onJoin, onPlayerClick, onOpenDetail, delay = 0, isJoined, currentUserId, distance }) {
   const [hovered, setHovered] = useState(false)
 
   const players = session.session_players || []
@@ -13,6 +13,7 @@ export default function SessionCard({ session, onJoin, onPlayerClick, delay = 0,
   const full = spotsLeft <= 0
   const creator = session.creator
   const pendingCount = players.filter(p => p.status === 'pending').length
+  const isCreator = creator?.id === currentUserId || session.creator_id === currentUserId
 
   return (
     <div
@@ -37,6 +38,22 @@ export default function SessionCard({ session, onJoin, onPlayerClick, delay = 0,
           letterSpacing: 0.5, textTransform: 'uppercase',
         }}>
           Dernière place
+        </div>
+      )}
+
+      {/* Pending requests badge for creator */}
+      {isCreator && pendingCount > 0 && (
+        <div
+          onClick={(e) => { e.stopPropagation(); onOpenDetail?.(session) }}
+          style={{
+            position: 'absolute', top: 12, right: urgent ? 120 : 12,
+            background: '#ff9800', color: 'white',
+            fontSize: 10, fontWeight: 700, padding: '3px 10px', borderRadius: 20,
+            fontFamily: 'var(--font-mono)', cursor: 'pointer',
+            letterSpacing: 0.5, animation: 'pulse 2s ease infinite',
+          }}
+        >
+          {pendingCount} demande{pendingCount > 1 ? 's' : ''} 🔔
         </div>
       )}
 
@@ -172,13 +189,25 @@ export default function SessionCard({ session, onJoin, onPlayerClick, delay = 0,
         {/* Action button */}
         {(() => {
           const myRequest = players.find(p => p.player?.id === currentUserId)
-          if (myRequest?.status === 'accepted' || isJoined) {
+          if (myRequest?.status === 'accepted' || isJoined || isCreator) {
             return (
-              <div style={{
-                background: '#e8f5e9', color: '#2e7d32', borderRadius: 10,
-                padding: '10px 18px', fontSize: 13, fontWeight: 700,
-              }}>
-                Inscrit ✓
+              <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                <div style={{
+                  background: '#e8f5e9', color: '#2e7d32', borderRadius: 10,
+                  padding: '10px 14px', fontSize: 12, fontWeight: 700,
+                }}>
+                  Inscrit ✓
+                </div>
+                <button
+                  onClick={(e) => { e.stopPropagation(); onOpenDetail?.(session) }}
+                  style={{
+                    background: 'var(--color-dark)', color: 'white', border: 'none',
+                    borderRadius: 10, padding: '10px 14px', fontSize: 12, fontWeight: 700,
+                    cursor: 'pointer', transition: 'all 0.2s',
+                  }}
+                >
+                  {isCreator ? '⚙️ Gérer' : '💬 Chat'}
+                </button>
               </div>
             )
           }

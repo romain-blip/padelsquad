@@ -13,9 +13,10 @@ export async function getSessions({ dept, level } = {}) {
     .from('sessions')
     .select(`
       *,
-      creator:profiles!sessions_creator_id_fkey(id, name, level, dept, avatar_url),
+      creator:profiles!sessions_creator_id_fkey(id, name, level, level_num, dept, avatar_url),
       session_players(
-        player:profiles(id, name, level)
+        status,
+        player:profiles(id, name, level, level_num, play_style, avatar_url)
       )
     `)
     .gte('date', todayStr)
@@ -36,9 +37,10 @@ export async function getMySession(userId) {
     .select(`
       session:sessions(
         *,
-        creator:profiles!sessions_creator_id_fkey(id, name, level, dept),
+        creator:profiles!sessions_creator_id_fkey(id, name, level, level_num, dept),
         session_players(
-          player:profiles(id, name, level)
+          status,
+          player:profiles(id, name, level, level_num, avatar_url)
         )
       )
     `)

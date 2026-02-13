@@ -9,6 +9,7 @@ import SessionCard from './SessionCard'
 import CreateSessionModal from './CreateSessionModal'
 import EditProfileModal from './EditProfileModal'
 import PlayerProfileModal from './PlayerProfileModal'
+import SessionDetailModal from './SessionDetailModal'
 import { Spinner } from './UI'
 
 export default function HomePage() {
@@ -27,6 +28,7 @@ export default function HomePage() {
   const [showCreate, setShowCreate] = useState(false)
   const [showProfile, setShowProfile] = useState(false)
   const [showPlayerProfile, setShowPlayerProfile] = useState(null)
+  const [showSessionDetail, setShowSessionDetail] = useState(null)
 
   // Track joined sessions
   const [joinedIds, setJoinedIds] = useState(new Set())
@@ -254,6 +256,7 @@ export default function HomePage() {
                   session={session}
                   onJoin={handleJoin}
                   onPlayerClick={(id) => setShowPlayerProfile(id)}
+                  onOpenDetail={(s) => setShowSessionDetail(s)}
                   delay={i * 50}
                   isJoined={joinedIds.has(session.id)}
                   currentUserId={user.id}
@@ -276,6 +279,18 @@ export default function HomePage() {
         <PlayerProfileModal
           playerId={showPlayerProfile}
           onClose={() => setShowPlayerProfile(null)}
+        />
+      )}
+      {showSessionDetail && (
+        <SessionDetailModal
+          session={showSessionDetail}
+          onClose={() => setShowSessionDetail(null)}
+          onRefresh={async () => {
+            await loadSessions()
+            // Update the detail modal with fresh data
+            const fresh = sessions.find(s => s.id === showSessionDetail.id)
+            if (fresh) setShowSessionDetail(fresh)
+          }}
         />
       )}
     </div>
