@@ -160,39 +160,58 @@ export default function ExplorePage() {
       </div>
 
       {/* Sort + filter */}
-      <div style={{ padding: '16px 22px 6px', display: 'flex', gap: 8, alignItems: 'center' }}>
-        {[
-          { id: 'date', label: '📅 Bientôt' },
-          { id: 'distance', label: '📍 Près de moi' },
-        ].map(s => (
-          <button key={s.id} onClick={() => {
-            if (s.id === 'distance' && !geoPosition) {
-              showToast('Active la géolocalisation', 'error')
-              return
-            }
-            setSortBy(s.id)
-          }} style={{
-            padding: '8px 16px', borderRadius: 24, border: 'none',
-            background: sortBy === s.id ? 'var(--color-dark)' : 'white',
-            color: sortBy === s.id ? 'white' : 'var(--color-muted)',
-            fontSize: 13, fontWeight: 600, cursor: 'pointer',
-            boxShadow: sortBy === s.id ? '0 4px 12px rgba(22,48,32,0.25)' : '0 1px 4px rgba(0,0,0,0.04)',
-            transition: 'all 0.25s',
-            opacity: s.id === 'distance' && !geoPosition ? 0.5 : 1,
-          }}>
-            {s.label}
-          </button>
-        ))}
+      <div style={{ padding: '14px 22px 6px', display: 'flex', gap: 10, alignItems: 'center' }}>
+        {/* Segmented control for sort */}
+        <div style={{
+          display: 'flex', background: 'var(--color-sand)', borderRadius: 10, padding: 3,
+        }}>
+          {[
+            { id: 'date', label: 'Récents' },
+            { id: 'distance', label: 'Proches' },
+          ].map(s => (
+            <button key={s.id} onClick={() => {
+              if (s.id === 'distance' && !geoPosition) {
+                showToast('Active la géolocalisation', 'error')
+                return
+              }
+              setSortBy(s.id)
+            }} style={{
+              padding: '7px 14px', borderRadius: 8, border: 'none',
+              background: sortBy === s.id ? 'white' : 'transparent',
+              color: sortBy === s.id ? 'var(--color-dark)' : 'var(--color-muted)',
+              fontSize: 12, fontWeight: 700, cursor: 'pointer',
+              transition: 'all 0.2s',
+              boxShadow: sortBy === s.id ? '0 1px 4px rgba(0,0,0,0.08)' : 'none',
+              opacity: s.id === 'distance' && !geoPosition ? 0.5 : 1,
+            }}>
+              {s.label}
+            </button>
+          ))}
+        </div>
+
         <div style={{ flex: 1 }} />
+
+        {/* Dept filter */}
         <select value={filterDept} onChange={e => setFilterDept(e.target.value)} style={{
-          padding: '8px 12px', borderRadius: 20, border: `1.5px solid var(--color-sand)`,
-          background: filterDept ? 'var(--color-dark)' : 'white',
+          padding: '7px 10px', borderRadius: 8, border: 'none',
+          background: filterDept ? 'var(--color-dark)' : 'var(--color-sand)',
           color: filterDept ? 'white' : 'var(--color-muted)',
           fontSize: 12, fontWeight: 600, cursor: 'pointer',
+          appearance: 'none', WebkitAppearance: 'none',
+          paddingRight: 24,
+          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='${filterDept ? '%23fff' : '%23A09889'}'/%3E%3C/svg%3E")`,
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'right 8px center',
         }}>
-          <option value="">Tous depts</option>
+          <option value="">Département</option>
           {DEPARTMENTS.map(d => <option key={d} value={d}>{d}</option>)}
         </select>
+        {filterDept && (
+          <button onClick={() => setFilterDept('')} style={{
+            background: 'none', border: 'none', color: 'var(--color-muted)',
+            fontSize: 14, cursor: 'pointer', padding: 0, lineHeight: 1,
+          }}>✕</button>
+        )}
       </div>
 
       {/* Count */}
