@@ -48,7 +48,7 @@ export async function getMySession(userId) {
   return data?.map(d => d.session).filter(Boolean) || []
 }
 
-export async function createSession({ city, club, date, time, level, dept, creatorId, latitude, longitude }) {
+export async function createSession({ city, club, date, time, level, dept, creatorId, latitude, longitude, duration, levelMin, levelMax }) {
   const { data, error } = await supabase
     .from('sessions')
     .insert({
@@ -62,26 +62,43 @@ export async function createSession({ city, club, date, time, level, dept, creat
       spots_total: 4,
       latitude: latitude || null,
       longitude: longitude || null,
+      duration: duration || 90,
+      level_min: levelMin || 1,
+      level_max: levelMax || 10,
     })
     .select()
     .single()
 
   if (error) throw error
 
-  // Auto-join creator
-  await joinSession(data.id, creatorId)
+  // Auto-join creator as accepted
+  await joinSession(data.id, creatorId, true)
   return data
 }
 
-export async function joinSession(sessionId, playerId) {
+export async function joinSession(sessionId, playerId, isCreator = false) {
   const { error } = await supabase
     .from('session_players')
-    .insert({ session_id: sessionId, player_id: playerId })
+    .insert({
+      session_id: sessionId,
+      player_id: playerId,
+      status: isCreator ? 'accepted' : 'pending',
+    })
 
   if (error) {
-    if (error.code === '23505') throw new Error('Tu es déjà inscrit à cette session')
+    if (error.code === '23505') throw new Error('Tu as déjà demandé à rejoindre cette session')
     throw error
   }
+}
+
+export async function updatePlayerStatus(sessionId, playerId, status) {
+  const { error } = await supabase
+    .from('session_players')
+    .update({ status })
+    .eq('session_id', sessionId)
+    .eq('player_id', playerId)
+
+  if (error) throw error
 }
 
 export async function leaveSession(sessionId, playerId) {
@@ -92,6 +109,49 @@ export async function leaveSession(sessionId, playerId) {
     .eq('player_id', playerId)
 
   if (error) throw error
+}
+
+// ============================================================
+// CHAT
+// ============================================================
+
+export async function getMessages(sessionId) {
+  const { data, error } = await supabase
+    .from('messages')
+    .select(`
+      *,
+      sender:profiles!messages_sender_id_fkey(id, name, avatar_url)
+    `)
+    .eq('session_id', sessionId)
+    .order('created_at', { ascending: true })
+
+  if (error) throw error
+  return data || []
+}
+
+export async function sendMessage(sessionId, senderId, content) {
+  const { data, error } = await supabase
+    .from('messages')
+    .insert({ session_id: sessionId, sender_id: senderId, content })
+    .select()
+    .single()
+
+  if (error) throw error
+  return data
+}
+
+export function subscribeToMessages(sessionId, callback) {
+  return supabase
+    .channel(`messages:${sessionId}`)
+    .on('postgres_changes', {
+      event: 'INSERT',
+      schema: 'public',
+      table: 'messages',
+      filter: `session_id=eq.${sessionId}`,
+    }, (payload) => {
+      callback(payload.new)
+    })
+    .subscribe()
 }
 
 // ============================================================

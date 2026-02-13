@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useAuth } from '../lib/auth'
-import { LEVELS, DEPARTMENTS, getLevelColor } from '../lib/constants'
+import { DEPARTMENTS, DURATIONS, TIME_SLOTS, getLevelNumColor, getLevelLabel } from '../lib/constants'
 import { Modal, Spinner } from './UI'
 import CityInput from './CityInput'
 
@@ -16,7 +16,9 @@ export default function CreateSessionModal({ onClose, onCreate }) {
     club: '',
     date: '',
     time: '',
-    level: profile?.level || 'Intermédiaire',
+    duration: 90,
+    levelMin: Math.max(1, (profile?.level_num || 5) - 2),
+    levelMax: Math.min(10, (profile?.level_num || 5) + 2),
     dept: profile?.dept || '',
     latitude: null,
     longitude: null,
@@ -49,6 +51,9 @@ export default function CreateSessionModal({ onClose, onCreate }) {
     }
   }
 
+  const minColor = getLevelNumColor(form.levelMin)
+  const maxColor = getLevelNumColor(form.levelMax)
+
   return (
     <Modal onClose={onClose}>
       <div style={{ padding: '28px 24px' }}>
@@ -62,6 +67,7 @@ export default function CreateSessionModal({ onClose, onCreate }) {
           }}>✕</button>
         </div>
 
+        {/* City */}
         <div style={{ marginBottom: 14 }}>
           <label style={{
             display: 'block', fontSize: 12, fontWeight: 600, color: '#888',
@@ -76,6 +82,7 @@ export default function CreateSessionModal({ onClose, onCreate }) {
           />
         </div>
 
+        {/* Club */}
         <div style={{ marginBottom: 14 }}>
           <label style={{
             display: 'block', fontSize: 12, fontWeight: 600, color: '#888',
@@ -93,6 +100,7 @@ export default function CreateSessionModal({ onClose, onCreate }) {
           />
         </div>
 
+        {/* Date + Time slot */}
         <div style={{ display: 'flex', gap: 10, marginBottom: 14 }}>
           <div style={{ flex: 1 }}>
             <label style={{
@@ -114,15 +122,43 @@ export default function CreateSessionModal({ onClose, onCreate }) {
               marginBottom: 5, fontFamily: 'var(--font-mono)',
               textTransform: 'uppercase', letterSpacing: 0.5,
             }}>Heure</label>
-            <input type="time" value={form.time}
+            <select value={form.time}
               onChange={(e) => setForm({ ...form, time: e.target.value })}
               style={{
                 width: '100%', padding: '10px 14px', borderRadius: 10,
-                border: '1px solid #e0e0e0', fontSize: 14,
-              }} />
+                border: '1px solid #e0e0e0', fontSize: 14, background: 'white',
+              }}>
+              <option value="">Créneau</option>
+              {TIME_SLOTS.map(t => <option key={t} value={t}>{t}</option>)}
+            </select>
           </div>
         </div>
 
+        {/* Duration */}
+        <div style={{ marginBottom: 14 }}>
+          <label style={{
+            display: 'block', fontSize: 12, fontWeight: 600, color: '#888',
+            marginBottom: 8, fontFamily: 'var(--font-mono)',
+            textTransform: 'uppercase', letterSpacing: 0.5,
+          }}>Durée</label>
+          <div style={{ display: 'flex', gap: 8 }}>
+            {DURATIONS.map(d => {
+              const active = form.duration === d.value
+              return (
+                <button key={d.value} onClick={() => setForm({ ...form, duration: d.value })} style={{
+                  flex: 1, padding: '10px', borderRadius: 10, border: 'none',
+                  background: active ? 'var(--color-dark)' : '#f0f0f0',
+                  color: active ? 'white' : '#888',
+                  fontSize: 15, fontWeight: 700, cursor: 'pointer', transition: 'all 0.2s',
+                }}>
+                  {d.label}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+
+        {/* Department */}
         <div style={{ marginBottom: 14 }}>
           <label style={{
             display: 'block', fontSize: 12, fontWeight: 600, color: '#888',
@@ -140,27 +176,54 @@ export default function CreateSessionModal({ onClose, onCreate }) {
           </select>
         </div>
 
+        {/* Level range */}
         <div style={{ marginBottom: 20 }}>
           <label style={{
             display: 'block', fontSize: 12, fontWeight: 600, color: '#888',
             marginBottom: 8, fontFamily: 'var(--font-mono)',
             textTransform: 'uppercase', letterSpacing: 0.5,
           }}>Niveau recherché</label>
-          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-            {LEVELS.map(lvl => {
-              const c = getLevelColor(lvl)
-              const active = form.level === lvl
-              return (
-                <button key={lvl} onClick={() => setForm({ ...form, level: lvl })} style={{
-                  padding: '6px 14px', borderRadius: 20,
-                  border: active ? `2px solid ${c.dot}` : '1px solid #ddd',
-                  background: active ? c.bg : 'white', color: active ? c.text : '#aaa',
-                  fontSize: 12, fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s',
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: 12,
+            padding: '12px 14px', background: '#fafaf8', borderRadius: 10,
+          }}>
+            <div style={{ textAlign: 'center', flex: 1 }}>
+              <div style={{ fontSize: 11, color: '#aaa', marginBottom: 4, fontFamily: 'var(--font-mono)' }}>MIN</div>
+              <select value={form.levelMin}
+                onChange={(e) => {
+                  const v = parseInt(e.target.value)
+                  setForm({ ...form, levelMin: v, levelMax: Math.max(v, form.levelMax) })
+                }}
+                style={{
+                  width: '100%', padding: '8px', borderRadius: 8, border: `2px solid ${minColor.dot}`,
+                  fontSize: 16, fontWeight: 700, background: minColor.bg, color: minColor.text,
+                  textAlign: 'center',
                 }}>
-                  {lvl}
-                </button>
-              )
-            })}
+                {Array.from({ length: 10 }, (_, i) => i + 1).map(n =>
+                  <option key={n} value={n}>{n}</option>
+                )}
+              </select>
+              <div style={{ fontSize: 10, color: '#aaa', marginTop: 2 }}>{getLevelLabel(form.levelMin)}</div>
+            </div>
+            <div style={{ fontSize: 18, color: '#ccc', fontWeight: 300 }}>→</div>
+            <div style={{ textAlign: 'center', flex: 1 }}>
+              <div style={{ fontSize: 11, color: '#aaa', marginBottom: 4, fontFamily: 'var(--font-mono)' }}>MAX</div>
+              <select value={form.levelMax}
+                onChange={(e) => {
+                  const v = parseInt(e.target.value)
+                  setForm({ ...form, levelMax: v, levelMin: Math.min(v, form.levelMin) })
+                }}
+                style={{
+                  width: '100%', padding: '8px', borderRadius: 8, border: `2px solid ${maxColor.dot}`,
+                  fontSize: 16, fontWeight: 700, background: maxColor.bg, color: maxColor.text,
+                  textAlign: 'center',
+                }}>
+                {Array.from({ length: 10 }, (_, i) => i + 1).map(n =>
+                  <option key={n} value={n}>{n}</option>
+                )}
+              </select>
+              <div style={{ fontSize: 10, color: '#aaa', marginTop: 2 }}>{getLevelLabel(form.levelMax)}</div>
+            </div>
           </div>
         </div>
 
@@ -174,7 +237,6 @@ export default function CreateSessionModal({ onClose, onCreate }) {
             fontSize: 16, fontWeight: 700,
             cursor: valid && !loading ? 'pointer' : 'default',
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-            transition: 'background 0.2s',
           }}
         >
           {loading && <Spinner size={16} />}

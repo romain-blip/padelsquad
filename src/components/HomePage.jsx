@@ -68,7 +68,12 @@ export default function HomePage() {
 
   async function handleCreate(form) {
     try {
-      await createSession({ ...form, creatorId: user.id })
+      await createSession({
+        ...form,
+        creatorId: user.id,
+        levelMin: form.levelMin,
+        levelMax: form.levelMax,
+      })
       showToast('Session créée ! 🔥')
       await loadSessions()
     } catch (err) {
@@ -80,8 +85,7 @@ export default function HomePage() {
   async function handleJoin(sessionId) {
     try {
       await joinSession(sessionId, user.id)
-      showToast('Tu es inscrit ! 🎾')
-      setJoinedIds(prev => new Set([...prev, sessionId]))
+      showToast('Demande envoyée ! ⏳')
       await loadSessions()
     } catch (err) {
       showToast(err.message, 'error')

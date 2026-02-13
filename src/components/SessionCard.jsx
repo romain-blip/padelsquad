@@ -6,11 +6,13 @@ export default function SessionCard({ session, onJoin, onPlayerClick, delay = 0,
   const [hovered, setHovered] = useState(false)
 
   const players = session.session_players || []
-  const spotsTaken = players.length
+  const acceptedPlayers = players.filter(p => p.status === 'accepted' || !p.status)
+  const spotsTaken = acceptedPlayers.length
   const spotsLeft = session.spots_total - spotsTaken
   const urgent = spotsLeft === 1
   const full = spotsLeft <= 0
   const creator = session.creator
+  const pendingCount = players.filter(p => p.status === 'pending').length
 
   return (
     <div
@@ -78,7 +80,7 @@ export default function SessionCard({ session, onJoin, onPlayerClick, delay = 0,
         </div>
       )}
 
-      {/* Date + Time + Dept */}
+      {/* Date + Time + Duration + Dept */}
       <div style={{ display: 'flex', gap: 14, marginBottom: 16, fontSize: 13, color: '#666', flexWrap: 'wrap' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#aaa" strokeWidth="2">
@@ -93,6 +95,14 @@ export default function SessionCard({ session, onJoin, onPlayerClick, delay = 0,
             <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
           </svg>
           <span style={{ fontWeight: 600 }}>{session.time?.slice(0, 5)}</span>
+          {session.duration && (
+            <span style={{
+              background: '#f0f0f0', padding: '1px 6px', borderRadius: 6,
+              fontSize: 11, fontWeight: 600, color: '#888',
+            }}>
+              {session.duration >= 60 ? `${Math.floor(session.duration / 60)}h${session.duration % 60 ? session.duration % 60 : ''}` : `${session.duration}min`}
+            </span>
+          )}
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#aaa" strokeWidth="2">
@@ -111,14 +121,25 @@ export default function SessionCard({ session, onJoin, onPlayerClick, delay = 0,
             </span>
           </div>
         )}
+        {(session.level_min || session.level_max) && (
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: 4,
+            background: '#fff3e0', borderRadius: 12, padding: '2px 8px',
+          }}>
+            <span style={{ fontSize: 11, fontWeight: 700, color: '#e65100' }}>
+              Niv. {session.level_min || 1}-{session.level_max || 10}
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Spots + Join */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        {/* Player circles */}
+        {/* Player circles — only show accepted players */}
         <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
           {Array.from({ length: session.spots_total }).map((_, i) => {
-            const player = players[i]?.player
+            const acceptedPlayers = players.filter(p => p.status === 'accepted' || !p.status)
+            const player = acceptedPlayers[i]?.player
             return (
               <div
                 key={i}
@@ -149,27 +170,55 @@ export default function SessionCard({ session, onJoin, onPlayerClick, delay = 0,
         </div>
 
         {/* Action button */}
-        {!full && !isJoined && (
-          <button
-            onClick={() => onJoin?.(session.id)}
-            style={{
-              background: hovered ? 'var(--color-dark)' : '#2d2d4e',
-              color: 'white', border: 'none', borderRadius: 10,
-              padding: '10px 18px', fontSize: 13, fontWeight: 700,
-              cursor: 'pointer', transition: 'all 0.2s ease',
-            }}
-          >
-            Je rejoins 🏸
-          </button>
-        )}
-        {isJoined && (
-          <div style={{
-            background: '#e8f5e9', color: '#2e7d32', borderRadius: 10,
-            padding: '10px 18px', fontSize: 13, fontWeight: 700,
-          }}>
-            Inscrit ✓
-          </div>
-        )}
+        {(() => {
+          const myRequest = players.find(p => p.player?.id === currentUserId)
+          if (myRequest?.status === 'accepted' || isJoined) {
+            return (
+              <div style={{
+                background: '#e8f5e9', color: '#2e7d32', borderRadius: 10,
+                padding: '10px 18px', fontSize: 13, fontWeight: 700,
+              }}>
+                Inscrit ✓
+              </div>
+            )
+          }
+          if (myRequest?.status === 'pending') {
+            return (
+              <div style={{
+                background: '#fff3e0', color: '#e65100', borderRadius: 10,
+                padding: '10px 18px', fontSize: 13, fontWeight: 700,
+              }}>
+                En attente ⏳
+              </div>
+            )
+          }
+          if (myRequest?.status === 'rejected') {
+            return (
+              <div style={{
+                background: '#fce4ec', color: '#c62828', borderRadius: 10,
+                padding: '10px 14px', fontSize: 12, fontWeight: 700,
+              }}>
+                Refusé
+              </div>
+            )
+          }
+          if (!full) {
+            return (
+              <button
+                onClick={() => onJoin?.(session.id)}
+                style={{
+                  background: hovered ? 'var(--color-dark)' : '#2d2d4e',
+                  color: 'white', border: 'none', borderRadius: 10,
+                  padding: '10px 16px', fontSize: 12, fontWeight: 700,
+                  cursor: 'pointer', transition: 'all 0.2s ease',
+                }}
+              >
+                Demander à rejoindre 🏸
+              </button>
+            )
+          }
+          return null
+        })()}
       </div>
     </div>
   )

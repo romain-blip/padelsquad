@@ -1,5 +1,50 @@
 export const LEVELS = ["Débutant", "Intermédiaire", "Avancé", "Compétition"];
 
+export const PLAY_STYLES = [
+  { value: 'loisir', label: '🎾 Loisir', desc: 'Pour le fun, ambiance détendue' },
+  { value: 'compétitif', label: '🏆 Compétitif', desc: 'Je joue pour gagner' },
+  { value: 'mixte', label: '⚡ Mixte', desc: 'Les deux selon l\'humeur' },
+];
+
+export const DURATIONS = [
+  { value: 60, label: '1h' },
+  { value: 90, label: '1h30' },
+  { value: 120, label: '2h' },
+];
+
+export const TIME_SLOTS = [
+  '07:00', '07:30', '08:00', '08:30', '09:00', '09:30',
+  '10:00', '10:30', '11:00', '11:30', '12:00', '12:30',
+  '13:00', '13:30', '14:00', '14:30', '15:00', '15:30',
+  '16:00', '16:30', '17:00', '17:30', '18:00', '18:30',
+  '19:00', '19:30', '20:00', '20:30', '21:00', '21:30', '22:00',
+];
+
+export function getRankFromSessions(count) {
+  if (count >= 100) return { label: 'Légende', emoji: '👑', color: '#ffd700' }
+  if (count >= 50) return { label: 'Diamant', emoji: '💎', color: '#b9f2ff' }
+  if (count >= 25) return { label: 'Or', emoji: '🥇', color: '#ffd700' }
+  if (count >= 10) return { label: 'Argent', emoji: '🥈', color: '#c0c0c0' }
+  if (count >= 3) return { label: 'Bronze', emoji: '🥉', color: '#cd7f32' }
+  return { label: 'Nouveau', emoji: '🆕', color: '#aaa' }
+}
+
+export function getLevelLabel(num) {
+  if (num <= 2) return 'Débutant'
+  if (num <= 4) return 'Intermédiaire'
+  if (num <= 6) return 'Intermédiaire+'
+  if (num <= 8) return 'Avancé'
+  return 'Expert'
+}
+
+export function getLevelNumColor(num) {
+  if (num <= 2) return { bg: '#e8f5e9', text: '#2e7d32', dot: '#4caf50' }
+  if (num <= 4) return { bg: '#fff3e0', text: '#e65100', dot: '#ff9800' }
+  if (num <= 6) return { bg: '#fff8e1', text: '#f57f17', dot: '#ffc107' }
+  if (num <= 8) return { bg: '#e3f2fd', text: '#1565c0', dot: '#2196f3' }
+  return { bg: '#fce4ec', text: '#c62828', dot: '#ef5350' }
+}
+
 export const DEPARTMENTS = [
   "01 - Ain", "02 - Aisne", "03 - Allier", "04 - Alpes-de-Haute-Provence",
   "05 - Hautes-Alpes", "06 - Alpes-Maritimes", "07 - Ardèche", "08 - Ardennes",
