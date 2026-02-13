@@ -4,9 +4,19 @@ import { Spinner } from './components/UI'
 import AuthPage from './components/AuthPage'
 import Onboarding from './components/Onboarding'
 import HomePage from './components/HomePage'
+import WelcomePage from './components/WelcomePage'
 
 function AppContent() {
   const { user, profile, loading } = useAuth()
+
+  // Check if we're on the welcome page (after email confirmation)
+  const isWelcome = window.location.pathname === '/welcome' ||
+    window.location.hash.includes('type=signup') ||
+    window.location.hash.includes('type=email')
+
+  if (isWelcome && !loading) {
+    return <WelcomePage />
+  }
 
   if (loading) {
     return (

@@ -5,6 +5,10 @@ import { supabase } from './supabase'
 // ============================================================
 
 export async function getSessions({ dept, level } = {}) {
+  // Use local date to avoid timezone issues
+  const today = new Date()
+  const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`
+
   let query = supabase
     .from('sessions')
     .select(`
@@ -14,7 +18,7 @@ export async function getSessions({ dept, level } = {}) {
         player:profiles(id, name, level)
       )
     `)
-    .gte('date', new Date().toISOString().split('T')[0])
+    .gte('date', todayStr)
     .order('date', { ascending: true })
     .order('time', { ascending: true })
 
@@ -23,7 +27,7 @@ export async function getSessions({ dept, level } = {}) {
 
   const { data, error } = await query
   if (error) throw error
-  return data
+  return data || []
 }
 
 export async function getMySession(userId) {
@@ -151,4 +155,27 @@ export async function getProfile(userId) {
 
   if (error) throw error
   return data
+}
+
+// ============================================================
+// CITIES AUTOCOMPLETE (API Geo Gouv)
+// ============================================================
+
+export async function searchCities(query) {
+  if (!query || query.length < 2) return []
+  try {
+    const res = await fetch(
+      `https://geo.api.gouv.fr/communes?nom=${encodeURIComponent(query)}&fields=nom,codesPostaux,departement&boost=population&limit=8`
+    )
+    if (!res.ok) return []
+    const data = await res.json()
+    return data.map(c => ({
+      name: c.nom,
+      postcode: c.codesPostaux?.[0] || '',
+      dept: c.departement?.nom || '',
+      deptCode: c.departement?.code || '',
+    }))
+  } catch {
+    return []
+  }
 }

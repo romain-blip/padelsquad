@@ -2,6 +2,12 @@ import { useState } from 'react'
 import { useAuth } from '../lib/auth'
 import { LEVELS, DEPARTMENTS, getLevelColor } from '../lib/constants'
 import { Modal, Spinner } from './UI'
+import CityInput from './CityInput'
+
+function getToday() {
+  const d = new Date()
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+}
 
 export default function CreateSessionModal({ onClose, onCreate }) {
   const { profile } = useAuth()
@@ -16,6 +22,15 @@ export default function CreateSessionModal({ onClose, onCreate }) {
   const [loading, setLoading] = useState(false)
 
   const valid = form.city && form.date && form.time && form.dept
+
+  function handleCitySelect(city) {
+    const matchingDept = DEPARTMENTS.find(d => d.startsWith(city.deptCode))
+    if (matchingDept) {
+      setForm(prev => ({ ...prev, city: city.name, dept: matchingDept }))
+    } else {
+      setForm(prev => ({ ...prev, city: city.name }))
+    }
+  }
 
   async function handleCreate() {
     if (!valid) return
@@ -43,27 +58,36 @@ export default function CreateSessionModal({ onClose, onCreate }) {
           }}>✕</button>
         </div>
 
-        {[
-          { key: 'city', label: 'Ville', placeholder: 'ex: Castelnau-le-Lez' },
-          { key: 'club', label: 'Club / Terrain', placeholder: 'ex: Padel Club 34' },
-        ].map(({ key, label, placeholder }) => (
-          <div key={key} style={{ marginBottom: 14 }}>
-            <label style={{
-              display: 'block', fontSize: 12, fontWeight: 600, color: '#888',
-              marginBottom: 5, fontFamily: 'var(--font-mono)',
-              textTransform: 'uppercase', letterSpacing: 0.5,
-            }}>{label}</label>
-            <input
-              placeholder={placeholder}
-              value={form[key]}
-              onChange={(e) => setForm({ ...form, [key]: e.target.value })}
-              style={{
-                width: '100%', padding: '10px 14px', borderRadius: 10,
-                border: '1px solid #e0e0e0', fontSize: 15,
-              }}
-            />
-          </div>
-        ))}
+        <div style={{ marginBottom: 14 }}>
+          <label style={{
+            display: 'block', fontSize: 12, fontWeight: 600, color: '#888',
+            marginBottom: 5, fontFamily: 'var(--font-mono)',
+            textTransform: 'uppercase', letterSpacing: 0.5,
+          }}>Ville</label>
+          <CityInput
+            value={form.city}
+            onChange={(val) => setForm({ ...form, city: val })}
+            onCitySelect={handleCitySelect}
+            placeholder="ex: Castelnau-le-Lez"
+          />
+        </div>
+
+        <div style={{ marginBottom: 14 }}>
+          <label style={{
+            display: 'block', fontSize: 12, fontWeight: 600, color: '#888',
+            marginBottom: 5, fontFamily: 'var(--font-mono)',
+            textTransform: 'uppercase', letterSpacing: 0.5,
+          }}>Club / Terrain</label>
+          <input
+            placeholder="ex: Padel Club 34"
+            value={form.club}
+            onChange={(e) => setForm({ ...form, club: e.target.value })}
+            style={{
+              width: '100%', padding: '10px 14px', borderRadius: 10,
+              border: '1px solid #e0e0e0', fontSize: 15,
+            }}
+          />
+        </div>
 
         <div style={{ display: 'flex', gap: 10, marginBottom: 14 }}>
           <div style={{ flex: 1 }}>
@@ -73,6 +97,7 @@ export default function CreateSessionModal({ onClose, onCreate }) {
               textTransform: 'uppercase', letterSpacing: 0.5,
             }}>Date</label>
             <input type="date" value={form.date}
+              min={getToday()}
               onChange={(e) => setForm({ ...form, date: e.target.value })}
               style={{
                 width: '100%', padding: '10px 14px', borderRadius: 10,
