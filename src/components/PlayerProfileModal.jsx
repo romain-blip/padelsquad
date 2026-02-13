@@ -87,7 +87,7 @@ export default function PlayerProfileModal({ playerId, onClose }) {
     <Modal onClose={onClose}>
       {/* Header */}
       <div style={{
-        background: 'linear-gradient(135deg, #1a1a2e 0%, #2d2d5e 100%)',
+        background: 'linear-gradient(135deg, var(--color-dark) 0%, #2d2d5e 100%)',
         padding: '28px 24px 20px', textAlign: 'center', position: 'relative',
         borderRadius: '20px 20px 0 0',
       }}>

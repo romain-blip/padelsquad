@@ -85,7 +85,7 @@ export default function CityInput({ value, onChange, onCitySelect, placeholder =
               onMouseEnter={(e) => e.currentTarget.style.background = '#f8f7f4'}
               onMouseLeave={(e) => e.currentTarget.style.background = 'white'}
             >
-              <div style={{ fontSize: 14, fontWeight: 600, color: '#1a1a2e' }}>
+              <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--color-dark)' }}>
                 {city.name}
               </div>
               <div style={{ fontSize: 11, color: '#aaa', fontFamily: 'var(--font-mono)' }}>

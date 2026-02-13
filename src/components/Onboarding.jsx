@@ -74,7 +74,7 @@ export default function Onboarding() {
         // Keep old level field for backward compat
         level: getLevelLabel(levelNum),
       })
-      showToast('Bienvenue dans la squad ! 🏸')
+      showToast('Bienvenue dans la squad ! 🎾')
     } catch (err) {
       showToast('Erreur: ' + err.message, 'error')
     } finally {

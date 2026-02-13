@@ -55,7 +55,7 @@ export default function AuthPage() {
         {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
           <span style={{ fontSize: 48, display: 'block', marginBottom: 12, animation: 'float 3s ease infinite' }}>
-            🏸
+            🎾
           </span>
           <h1 style={{
             color: 'white', fontSize: 32, fontWeight: 900, letterSpacing: -1, margin: 0,

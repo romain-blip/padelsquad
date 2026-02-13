@@ -55,7 +55,7 @@ export default function WelcomePage() {
           fontSize: 16, fontWeight: 700,
           boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
         }}>
-          Commencer à jouer 🏸
+          Commencer à jouer 🎾
         </a>
 
         <p style={{
