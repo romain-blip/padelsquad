@@ -13,7 +13,7 @@ export default function BottomNav({ tab, setTab }) {
       background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(16px)',
       WebkitBackdropFilter: 'blur(16px)',
       borderTop: '1px solid var(--color-sand)',
-      display: 'flex', padding: '6px 8px 14px', zIndex: 100,
+      display: 'flex', padding: '6px 8px calc(14px + env(safe-area-inset-bottom, 0px))', zIndex: 100,
       borderRadius: '20px 20px 0 0',
     }}>
       {TABS.map(t => {
