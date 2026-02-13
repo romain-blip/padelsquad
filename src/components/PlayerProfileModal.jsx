@@ -124,6 +124,7 @@ export default function PlayerProfileModal({ playerId, onClose }) {
             </span>
           )}
         </div>
+        </div>
         <button onClick={onClose} style={{
           position: 'absolute', top: 12, right: 12,
           background: 'rgba(255,255,255,0.15)', border: 'none', width: 28, height: 28,
