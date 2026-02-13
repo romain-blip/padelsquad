@@ -1,8 +1,9 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useAuth } from '../lib/auth'
 import { useToast } from '../lib/toast'
 import { getSessions, getMySession, createSession, joinSession } from '../lib/db'
 import { LEVELS, DEPARTMENTS } from '../lib/constants'
+import { useGeolocation, getDistanceKm, formatDistance } from '../lib/geolocation'
 import Header from './Header'
 import SessionCard from './SessionCard'
 import CreateSessionModal from './CreateSessionModal'
@@ -13,12 +14,14 @@ import { Spinner } from './UI'
 export default function HomePage() {
   const { user, profile } = useAuth()
   const { showToast } = useToast()
+  const { position: geoPosition, loading: geoLoading } = useGeolocation()
 
   const [sessions, setSessions] = useState([])
   const [loading, setLoading] = useState(true)
   const [view, setView] = useState('sessions')
   const [filterLevel, setFilterLevel] = useState('')
   const [filterDept, setFilterDept] = useState('')
+  const [sortBy, setSortBy] = useState('date') // 'date' | 'distance'
 
   // Modals
   const [showCreate, setShowCreate] = useState(false)
@@ -84,6 +87,20 @@ export default function HomePage() {
       showToast(err.message, 'error')
     }
   }
+
+  // Sort sessions by distance if geoloc available
+  const sortedSessions = useMemo(() => {
+    if (sortBy !== 'distance' || !geoPosition) return sessions
+
+    return [...sessions].sort((a, b) => {
+      const distA = getDistanceKm(geoPosition.lat, geoPosition.lng, a.latitude, a.longitude)
+      const distB = getDistanceKm(geoPosition.lat, geoPosition.lng, b.latitude, b.longitude)
+      if (distA === null && distB === null) return 0
+      if (distA === null) return 1
+      if (distB === null) return -1
+      return distA - distB
+    })
+  }, [sessions, sortBy, geoPosition])
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--color-bg)' }}>
@@ -161,6 +178,33 @@ export default function HomePage() {
                 ✕ Reset
               </button>
             )}
+
+            {/* Sort toggle */}
+            <div style={{ marginLeft: 'auto', display: 'flex', gap: 4 }}>
+              <button onClick={() => setSortBy('date')} style={{
+                padding: '5px 10px', borderRadius: 8, border: 'none', fontSize: 11, fontWeight: 600,
+                background: sortBy === 'date' ? 'var(--color-dark)' : '#f0f0f0',
+                color: sortBy === 'date' ? 'white' : '#999',
+                cursor: 'pointer', transition: 'all 0.2s',
+              }}>
+                📅 Date
+              </button>
+              <button
+                onClick={() => {
+                  if (geoPosition) setSortBy('distance')
+                  else showToast('Active la géolocalisation pour trier par distance', 'error')
+                }}
+                style={{
+                  padding: '5px 10px', borderRadius: 8, border: 'none', fontSize: 11, fontWeight: 600,
+                  background: sortBy === 'distance' ? 'var(--color-dark)' : '#f0f0f0',
+                  color: sortBy === 'distance' ? 'white' : '#999',
+                  cursor: 'pointer', transition: 'all 0.2s',
+                  opacity: geoPosition ? 1 : 0.5,
+                }}
+              >
+                📍 Distance
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -169,7 +213,7 @@ export default function HomePage() {
       <div style={{ maxWidth: 800, margin: '0 auto', padding: '14px 20px 6px' }}>
         <p style={{ fontSize: 13, color: '#aaa', fontFamily: 'var(--font-mono)', margin: 0 }}>
           {loading ? 'Chargement...' : (
-            `${sessions.length} session${sessions.length !== 1 ? 's' : ''} disponible${sessions.length !== 1 ? 's' : ''}` +
+            `${sortedSessions.length} session${sortedSessions.length !== 1 ? 's' : ''} disponible${sortedSessions.length !== 1 ? 's' : ''}` +
             (view === 'mySessions' ? ' (mes sessions)' : '')
           )}
         </p>
@@ -181,7 +225,7 @@ export default function HomePage() {
           <div style={{ display: 'flex', justifyContent: 'center', padding: 60 }}>
             <Spinner size={32} />
           </div>
-        ) : sessions.length === 0 ? (
+        ) : sortedSessions.length === 0 ? (
           <div style={{
             textAlign: 'center', padding: '50px 20px', color: '#bbb',
             animation: 'fadeIn 0.3s ease',
@@ -196,17 +240,23 @@ export default function HomePage() {
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-            {sessions.map((session, i) => (
-              <SessionCard
-                key={session.id}
-                session={session}
-                onJoin={handleJoin}
-                onPlayerClick={(id) => setShowPlayerProfile(id)}
-                delay={i * 50}
-                isJoined={joinedIds.has(session.id)}
-                currentUserId={user.id}
-              />
-            ))}
+            {sortedSessions.map((session, i) => {
+              const distance = geoPosition
+                ? getDistanceKm(geoPosition.lat, geoPosition.lng, session.latitude, session.longitude)
+                : null
+              return (
+                <SessionCard
+                  key={session.id}
+                  session={session}
+                  onJoin={handleJoin}
+                  onPlayerClick={(id) => setShowPlayerProfile(id)}
+                  delay={i * 50}
+                  isJoined={joinedIds.has(session.id)}
+                  currentUserId={user.id}
+                  distance={distance}
+                />
+              )
+            })}
           </div>
         )}
       </div>

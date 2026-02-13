@@ -48,7 +48,7 @@ export async function getMySession(userId) {
   return data?.map(d => d.session).filter(Boolean) || []
 }
 
-export async function createSession({ city, club, date, time, level, dept, creatorId }) {
+export async function createSession({ city, club, date, time, level, dept, creatorId, latitude, longitude }) {
   const { data, error } = await supabase
     .from('sessions')
     .insert({
@@ -60,6 +60,8 @@ export async function createSession({ city, club, date, time, level, dept, creat
       dept,
       creator_id: creatorId,
       spots_total: 4,
+      latitude: latitude || null,
+      longitude: longitude || null,
     })
     .select()
     .single()
@@ -165,7 +167,7 @@ export async function searchCities(query) {
   if (!query || query.length < 2) return []
   try {
     const res = await fetch(
-      `https://geo.api.gouv.fr/communes?nom=${encodeURIComponent(query)}&fields=nom,codesPostaux,departement&boost=population&limit=8`
+      `https://geo.api.gouv.fr/communes?nom=${encodeURIComponent(query)}&fields=nom,codesPostaux,departement,centre&boost=population&limit=8`
     )
     if (!res.ok) return []
     const data = await res.json()
@@ -174,6 +176,8 @@ export async function searchCities(query) {
       postcode: c.codesPostaux?.[0] || '',
       dept: c.departement?.nom || '',
       deptCode: c.departement?.code || '',
+      lat: c.centre?.coordinates?.[1] || null,
+      lng: c.centre?.coordinates?.[0] || null,
     }))
   } catch {
     return []

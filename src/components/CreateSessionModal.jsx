@@ -18,6 +18,8 @@ export default function CreateSessionModal({ onClose, onCreate }) {
     time: '',
     level: profile?.level || 'Intermédiaire',
     dept: profile?.dept || '',
+    latitude: null,
+    longitude: null,
   })
   const [loading, setLoading] = useState(false)
 
@@ -25,11 +27,13 @@ export default function CreateSessionModal({ onClose, onCreate }) {
 
   function handleCitySelect(city) {
     const matchingDept = DEPARTMENTS.find(d => d.startsWith(city.deptCode))
-    if (matchingDept) {
-      setForm(prev => ({ ...prev, city: city.name, dept: matchingDept }))
-    } else {
-      setForm(prev => ({ ...prev, city: city.name }))
-    }
+    setForm(prev => ({
+      ...prev,
+      city: city.name,
+      dept: matchingDept || prev.dept,
+      latitude: city.lat,
+      longitude: city.lng,
+    }))
   }
 
   async function handleCreate() {

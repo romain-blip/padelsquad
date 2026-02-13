@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { formatDate } from '../lib/constants'
 import { LevelBadge, RatingBadge } from './UI'
 
-export default function SessionCard({ session, onJoin, onPlayerClick, delay = 0, isJoined, currentUserId }) {
+export default function SessionCard({ session, onJoin, onPlayerClick, delay = 0, isJoined, currentUserId, distance }) {
   const [hovered, setHovered] = useState(false)
 
   const players = session.session_players || []
@@ -101,6 +101,16 @@ export default function SessionCard({ session, onJoin, onPlayerClick, delay = 0,
           </svg>
           <span style={{ fontWeight: 500, color: '#888' }}>{session.dept}</span>
         </div>
+        {distance !== null && distance !== undefined && (
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: 5,
+            background: '#eef', borderRadius: 12, padding: '2px 8px',
+          }}>
+            <span style={{ fontSize: 12, fontWeight: 700, color: '#1565c0' }}>
+              {distance < 1 ? '< 1' : distance} km
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Spots + Join */}
