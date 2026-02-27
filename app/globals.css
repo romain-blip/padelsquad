@@ -4,52 +4,59 @@
 
 @layer base {
   :root {
-    /* Padel/Tennis themed - Dark premium with orange & green */
-    --background: 160 15% 6%;
-    --foreground: 0 0% 98%;
+    /* Padel Squad - Premium Dark Theme */
+    /* Inspired by esports/fintech with tennis orange & court green */
     
-    --card: 160 12% 9%;
-    --card-foreground: 0 0% 98%;
+    --background: 0 0% 4%;
+    --foreground: 0 0% 96%;
     
-    --popover: 160 12% 9%;
-    --popover-foreground: 0 0% 98%;
+    --card: 0 0% 7%;
+    --card-foreground: 0 0% 96%;
     
-    /* Primary: Tennis court green - elegant teal-green */
-    --primary: 158 64% 52%;
-    --primary-foreground: 160 15% 6%;
+    --popover: 0 0% 7%;
+    --popover-foreground: 0 0% 96%;
     
-    /* Secondary: Dark elevated surface */
-    --secondary: 160 12% 13%;
-    --secondary-foreground: 0 0% 98%;
+    /* Primary: Vibrant Tennis Ball Green */
+    --primary: 82 84% 50%;
+    --primary-foreground: 0 0% 4%;
     
-    /* Muted: Subtle gray with green tint */
-    --muted: 160 10% 16%;
-    --muted-foreground: 160 8% 50%;
+    /* Secondary: Elevated dark surface */
+    --secondary: 0 0% 11%;
+    --secondary-foreground: 0 0% 96%;
     
-    /* Accent: Padel ball orange */
-    --accent: 28 100% 54%;
+    /* Muted: Neutral dark gray */
+    --muted: 0 0% 14%;
+    --muted-foreground: 0 0% 50%;
+    
+    /* Accent: Padel ball vivid orange */
+    --accent: 24 100% 50%;
     --accent-foreground: 0 0% 100%;
     
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
     
-    --border: 160 10% 16%;
-    --input: 160 10% 16%;
-    --ring: 158 64% 52%;
-    --radius: 0.75rem;
+    --border: 0 0% 14%;
+    --input: 0 0% 14%;
+    --ring: 82 84% 50%;
+    --radius: 0.625rem;
     
-    /* Chart colors - padel/tennis themed */
-    --chart-1: 158 64% 52%;
-    --chart-2: 28 100% 54%;
-    --chart-3: 142 71% 45%;
-    --chart-4: 45 93% 47%;
-    --chart-5: 199 89% 48%;
+    /* Chart colors */
+    --chart-1: 82 84% 50%;
+    --chart-2: 24 100% 50%;
+    --chart-3: 45 93% 47%;
+    --chart-4: 199 89% 48%;
+    --chart-5: 280 85% 65%;
     
-    /* Custom semantic colors */
+    /* Semantic colors */
     --success: 142 71% 45%;
     --success-foreground: 0 0% 100%;
     --warning: 45 93% 47%;
     --warning-foreground: 0 0% 7%;
+    
+    /* Custom brand colors */
+    --gold: 45 93% 47%;
+    --silver: 0 0% 75%;
+    --bronze: 24 100% 50%;
   }
 }
 

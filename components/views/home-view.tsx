@@ -22,22 +22,22 @@ export function HomeView({ onNavigate }: HomeViewProps) {
     <div className="space-y-8">
       {/* Welcome header */}
       <div className="relative">
-        <div className="absolute -top-20 -left-20 w-64 h-64 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -top-10 right-0 w-48 h-48 bg-accent/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-20 -left-20 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-10 right-0 w-48 h-48 bg-accent/5 rounded-full blur-3xl pointer-events-none" />
         <h1 className="text-2xl font-bold text-foreground relative">
           Bonjour, {currentUser.name.split(" ")[0]}
         </h1>
         <p className="text-muted-foreground mt-1 relative">
-          Prêt pour ta prochaine session de padel ?
+          Pret pour ta prochaine session de padel ?
         </p>
       </div>
 
       {/* Stats cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="border border-border/50 bg-gradient-to-br from-card to-card/50 hover:border-primary/50 transition-all duration-300 group">
+        <Card className="border border-border bg-card hover:bg-muted/30 transition-all">
           <CardContent className="p-5">
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 group-hover:shadow-lg group-hover:shadow-primary/20 transition-shadow">
+              <div className="p-3 rounded-xl bg-primary/10">
                 <Trophy className="w-5 h-5 text-primary" />
               </div>
               <div>
@@ -48,10 +48,10 @@ export function HomeView({ onNavigate }: HomeViewProps) {
           </CardContent>
         </Card>
 
-        <Card className="border border-border/50 bg-gradient-to-br from-card to-card/50 hover:border-accent/50 transition-all duration-300 group">
+        <Card className="border border-border bg-card hover:bg-muted/30 transition-all">
           <CardContent className="p-5">
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-xl bg-gradient-to-br from-accent/20 to-accent/5 group-hover:shadow-lg group-hover:shadow-accent/20 transition-shadow">
+              <div className="p-3 rounded-xl bg-accent/10">
                 <Target className="w-5 h-5 text-accent" />
               </div>
               <div>
@@ -62,10 +62,10 @@ export function HomeView({ onNavigate }: HomeViewProps) {
           </CardContent>
         </Card>
 
-        <Card className="border border-border/50 bg-gradient-to-br from-card to-card/50 hover:border-yellow-500/50 transition-all duration-300 group">
+        <Card className="border border-border bg-card hover:bg-muted/30 transition-all">
           <CardContent className="p-5">
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-xl bg-gradient-to-br from-yellow-500/20 to-yellow-500/5 group-hover:shadow-lg group-hover:shadow-yellow-500/20 transition-shadow">
+              <div className="p-3 rounded-xl bg-yellow-500/10">
                 <TrendingUp className="w-5 h-5 text-yellow-500" />
               </div>
               <div>
@@ -76,15 +76,15 @@ export function HomeView({ onNavigate }: HomeViewProps) {
           </CardContent>
         </Card>
 
-        <Card className="border border-border/50 bg-gradient-to-br from-card to-card/50 hover:border-primary/50 transition-all duration-300 group">
+        <Card className="border border-border bg-card hover:bg-muted/30 transition-all">
           <CardContent className="p-5">
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 group-hover:shadow-lg group-hover:shadow-primary/20 transition-shadow">
+              <div className="p-3 rounded-xl bg-primary/10">
                 <Calendar className="w-5 h-5 text-primary" />
               </div>
               <div>
                 <p className="text-2xl font-bold text-foreground">{currentUser.wins + currentUser.losses}</p>
-                <p className="text-sm text-muted-foreground">Matchs joués</p>
+                <p className="text-sm text-muted-foreground">Matchs joues</p>
               </div>
             </div>
           </CardContent>
@@ -119,8 +119,8 @@ export function HomeView({ onNavigate }: HomeViewProps) {
                 <ChevronRight className="w-4 h-4 ml-1" />
               </Button>
             </div>
-            <Card className="border border-border/50 bg-card/50 backdrop-blur-sm">
-              <CardContent className="p-0 divide-y divide-border/50">
+            <Card className="border border-border bg-card">
+              <CardContent className="p-0 divide-y divide-border">
                 {recentMatches.map((match) => {
                   const userInTeam1 = match.players.team1.some(p => p.id === currentUser.id)
                   const userTeam = userInTeam1 ? "team1" : "team2"
@@ -128,13 +128,13 @@ export function HomeView({ onNavigate }: HomeViewProps) {
                   const isWinner = match.winner === userTeam
 
                   return (
-                    <div key={match.id} className="p-4 flex items-center gap-4 hover:bg-muted/30 transition-colors">
+                    <div key={match.id} className="p-4 flex items-center gap-4 hover:bg-muted/50 transition-colors">
                       <div className={cn(
                         "w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0",
-                        isWinner ? "bg-gradient-to-br from-emerald-500/20 to-emerald-500/5" : "bg-muted/50"
+                        isWinner ? "bg-primary/10" : "bg-muted"
                       )}>
                         {isWinner ? (
-                          <Trophy className="w-5 h-5 text-emerald-400" />
+                          <Trophy className="w-5 h-5 text-primary" />
                         ) : (
                           <Target className="w-5 h-5 text-muted-foreground" />
                         )}
@@ -143,9 +143,9 @@ export function HomeView({ onNavigate }: HomeViewProps) {
                         <div className="flex items-center gap-2 flex-wrap">
                           <span className={cn(
                             "font-semibold",
-                            isWinner ? "text-emerald-400" : "text-muted-foreground"
+                            isWinner ? "text-primary" : "text-muted-foreground"
                           )}>
-                            {isWinner ? "Victoire" : "Défaite"}
+                            {isWinner ? "Victoire" : "Defaite"}
                           </span>
                           <span className="text-muted-foreground">
                             vs {match.players[opponentTeam].map(p => p.name.split(" ")[0]).join(" & ")}
@@ -185,21 +185,21 @@ export function HomeView({ onNavigate }: HomeViewProps) {
                 <ChevronRight className="w-4 h-4 ml-1" />
               </Button>
             </div>
-            <Card className="border border-border/50 bg-card/50 backdrop-blur-sm">
-              <CardContent className="p-0 divide-y divide-border/50">
+            <Card className="border border-border bg-card">
+              <CardContent className="p-0 divide-y divide-border">
                 {topPlayers.map((entry, index) => (
                   <div 
                     key={entry.player.id} 
                     className={cn(
-                      "p-3 flex items-center gap-3 hover:bg-muted/30 transition-colors",
-                      entry.player.id === currentUser.id && "bg-primary/10 border-l-2 border-l-primary"
+                      "p-3 flex items-center gap-3 hover:bg-muted/50 transition-colors",
+                      entry.player.id === currentUser.id && "bg-primary/5"
                     )}
                   >
                     <span className={cn(
                       "w-6 text-center font-bold text-sm",
-                      index === 0 && "text-yellow-400 drop-shadow-[0_0_4px_rgba(250,204,21,0.5)]",
+                      index === 0 && "text-yellow-400",
                       index === 1 && "text-slate-300",
-                      index === 2 && "text-accent drop-shadow-[0_0_4px_hsl(var(--accent)/0.4)]",
+                      index === 2 && "text-accent",
                       index > 2 && "text-muted-foreground"
                     )}>
                       {entry.rank}
@@ -217,7 +217,7 @@ export function HomeView({ onNavigate }: HomeViewProps) {
                       {entry.change !== "same" && (
                         <span className={cn(
                           "text-xs font-medium",
-                          entry.change === "up" ? "text-emerald-400" : "text-red-400"
+                          entry.change === "up" ? "text-primary" : "text-destructive"
                         )}>
                           {entry.change === "up" ? "+" : "-"}{entry.changeAmount}
                         </span>
@@ -230,21 +230,20 @@ export function HomeView({ onNavigate }: HomeViewProps) {
           </section>
 
           {/* Quick actions */}
-          <Card className="border border-border/50 bg-gradient-to-br from-primary/10 via-card to-accent/10 overflow-hidden relative">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5" />
-            <CardContent className="p-5 relative">
+          <Card className="border border-border bg-card">
+            <CardContent className="p-5">
               <h3 className="font-semibold text-foreground mb-4">Actions rapides</h3>
               <div className="space-y-3">
                 <Button 
-                  className="w-full justify-start bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg shadow-primary/25" 
+                  className="w-full justify-start bg-primary hover:bg-primary/90 text-primary-foreground" 
                   onClick={() => onNavigate("create")}
                 >
                   <Calendar className="w-4 h-4 mr-2" />
-                  Créer une session
+                  Creer une session
                 </Button>
                 <Button 
                   variant="outline" 
-                  className="w-full justify-start border-border/50 hover:bg-muted/50 hover:border-primary/50"
+                  className="w-full justify-start border-border hover:bg-muted"
                   onClick={() => onNavigate("search")}
                 >
                   <Target className="w-4 h-4 mr-2" />
