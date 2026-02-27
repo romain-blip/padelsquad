@@ -18,7 +18,8 @@ export function RankingView() {
     <div className="space-y-6">
       {/* Header */}
       <div className="relative">
-        <div className="absolute -top-20 -left-20 w-72 h-72 bg-yellow-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-20 -left-20 w-72 h-72 bg-accent/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-10 right-10 w-48 h-48 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
         <h1 className="text-2xl font-bold text-foreground relative">Classement</h1>
         <p className="text-muted-foreground mt-1 relative">
           Suis ta progression et compare-toi aux autres joueurs
@@ -101,9 +102,9 @@ export function RankingView() {
                     <td className="px-5 py-4">
                       <span className={cn(
                         "font-bold text-lg",
-                        index === 0 && "text-yellow-400",
+                        index === 0 && "text-yellow-400 drop-shadow-[0_0_6px_rgba(250,204,21,0.5)]",
                         index === 1 && "text-slate-300",
-                        index === 2 && "text-orange-400",
+                        index === 2 && "text-accent drop-shadow-[0_0_6px_hsl(var(--accent)/0.4)]",
                         index > 2 && "text-muted-foreground"
                       )}>
                         {entry.rank}

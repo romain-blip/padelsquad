@@ -4,51 +4,51 @@
 
 @layer base {
   :root {
-    /* Dark futuristic theme - Premium sports app */
-    --background: 220 20% 7%;
+    /* Padel/Tennis themed - Dark premium with orange & green */
+    --background: 160 15% 6%;
     --foreground: 0 0% 98%;
     
-    --card: 220 20% 10%;
+    --card: 160 12% 9%;
     --card-foreground: 0 0% 98%;
     
-    --popover: 220 20% 10%;
+    --popover: 160 12% 9%;
     --popover-foreground: 0 0% 98%;
     
-    /* Primary: Electric cyan/teal */
-    --primary: 174 72% 56%;
-    --primary-foreground: 220 20% 7%;
+    /* Primary: Tennis court green - elegant teal-green */
+    --primary: 158 64% 52%;
+    --primary-foreground: 160 15% 6%;
     
     /* Secondary: Dark elevated surface */
-    --secondary: 220 20% 14%;
+    --secondary: 160 12% 13%;
     --secondary-foreground: 0 0% 98%;
     
-    /* Muted: Subtle gray */
-    --muted: 220 15% 18%;
-    --muted-foreground: 220 10% 55%;
+    /* Muted: Subtle gray with green tint */
+    --muted: 160 10% 16%;
+    --muted-foreground: 160 8% 50%;
     
-    /* Accent: Vibrant orange/coral */
-    --accent: 25 95% 58%;
+    /* Accent: Padel ball orange */
+    --accent: 28 100% 54%;
     --accent-foreground: 0 0% 100%;
     
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
     
-    --border: 220 15% 18%;
-    --input: 220 15% 18%;
-    --ring: 174 72% 56%;
+    --border: 160 10% 16%;
+    --input: 160 10% 16%;
+    --ring: 158 64% 52%;
     --radius: 0.75rem;
     
-    /* Chart colors - vibrant for dark mode */
-    --chart-1: 174 72% 56%;
-    --chart-2: 25 95% 58%;
+    /* Chart colors - padel/tennis themed */
+    --chart-1: 158 64% 52%;
+    --chart-2: 28 100% 54%;
     --chart-3: 142 71% 45%;
-    --chart-4: 280 85% 65%;
+    --chart-4: 45 93% 47%;
     --chart-5: 199 89% 48%;
     
     /* Custom semantic colors */
     --success: 142 71% 45%;
     --success-foreground: 0 0% 100%;
-    --warning: 38 92% 50%;
+    --warning: 45 93% 47%;
     --warning-foreground: 0 0% 7%;
   }
 }

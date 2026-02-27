@@ -16,9 +16,12 @@ interface SessionCardProps {
 
 const levelColors: Record<string, string> = {
   "tous niveaux": "bg-muted text-muted-foreground border border-border/50",
-  "débutant": "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20",
-  "intermédiaire": "bg-primary/10 text-primary border border-primary/20",
-  "avancé": "bg-accent/10 text-accent border border-accent/20",
+  "débutant": "bg-primary/10 text-primary border border-primary/20",
+  "debutant": "bg-primary/10 text-primary border border-primary/20",
+  "intermédiaire": "bg-accent/10 text-accent border border-accent/20",
+  "intermediaire": "bg-accent/10 text-accent border border-accent/20",
+  "avancé": "bg-yellow-500/10 text-yellow-400 border border-yellow-500/20",
+  "avance": "bg-yellow-500/10 text-yellow-400 border border-yellow-500/20",
   "pro": "bg-red-500/10 text-red-400 border border-red-500/20",
 }
 

@@ -16,6 +16,7 @@ import {
 } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
+import { Logo } from "@/components/logo"
 import { currentUser } from "@/lib/mock-data"
 
 interface SidebarProps {
@@ -38,11 +39,8 @@ export function Sidebar({ activeView, onViewChange }: SidebarProps) {
     <>
       {/* Mobile header */}
       <header className="lg:hidden fixed top-0 left-0 right-0 h-14 bg-background/95 backdrop-blur-md border-b border-border z-50 flex items-center justify-between px-4">
-        <Link href="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20">
-            <span className="text-primary-foreground font-bold text-sm">PS</span>
-          </div>
-          <span className="font-semibold text-foreground">Padel Squad</span>
+        <Link href="/">
+          <Logo size="sm" />
         </Link>
         <Button
           variant="ghost"
@@ -72,11 +70,8 @@ export function Sidebar({ activeView, onViewChange }: SidebarProps) {
         <div className="flex flex-col h-full">
           {/* Logo */}
           <div className="h-16 flex items-center px-6 border-b border-border">
-            <Link href="/" className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/25">
-                <span className="text-primary-foreground font-bold text-sm">PS</span>
-              </div>
-              <span className="font-semibold text-lg text-foreground">Padel Squad</span>
+            <Link href="/">
+              <Logo size="md" />
             </Link>
           </div>
 

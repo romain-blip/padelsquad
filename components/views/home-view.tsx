@@ -197,9 +197,9 @@ export function HomeView({ onNavigate }: HomeViewProps) {
                   >
                     <span className={cn(
                       "w-6 text-center font-bold text-sm",
-                      index === 0 && "text-yellow-400",
+                      index === 0 && "text-yellow-400 drop-shadow-[0_0_4px_rgba(250,204,21,0.5)]",
                       index === 1 && "text-slate-300",
-                      index === 2 && "text-orange-400",
+                      index === 2 && "text-accent drop-shadow-[0_0_4px_hsl(var(--accent)/0.4)]",
                       index > 2 && "text-muted-foreground"
                     )}>
                       {entry.rank}
