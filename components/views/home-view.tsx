@@ -1,14 +1,10 @@
 "use client"
 
-import { ChevronRight, Flame, Star, Zap } from "lucide-react"
+import { ChevronRight, Trophy, Target, TrendingUp, Calendar, MapPin } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { SessionCard } from "@/components/session-card"
-import { StatsCard } from "@/components/stats-card"
-import { XPProgress } from "@/components/xp-progress"
-import { MatchCard } from "@/components/match-card"
 import { sessions, matches, currentUser, leaderboard } from "@/lib/mock-data"
 import { cn } from "@/lib/utils"
 
@@ -17,150 +13,245 @@ interface HomeViewProps {
 }
 
 export function HomeView({ onNavigate }: HomeViewProps) {
-  const upcomingSessions = sessions.filter((s) => s.status === "open").slice(0, 2)
-  const recentMatches = matches.slice(0, 2)
-  const userRank = leaderboard.find((e) => e.player.id === currentUser.id)
+  const upcomingSessions = sessions.filter((s) => s.status === "open").slice(0, 3)
+  const recentMatches = matches.slice(0, 3)
+  const topPlayers = leaderboard.slice(0, 5)
+  const winRate = Math.round((currentUser.wins / (currentUser.wins + currentUser.losses)) * 100)
 
   return (
-    <div className="space-y-6 pb-24">
-      {/* Welcome banner */}
-      <Card className="p-5 bg-gradient-to-br from-primary/20 via-card to-card border-primary/20 overflow-hidden relative">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl" />
-        <div className="relative z-10">
-          <div className="flex items-center gap-3 mb-3">
-            <Avatar className="w-12 h-12 border-2 border-primary">
-              <AvatarImage src={currentUser.avatar} alt={currentUser.name} />
-              <AvatarFallback>{currentUser.name.charAt(0)}</AvatarFallback>
-            </Avatar>
-            <div>
-              <p className="text-muted-foreground text-sm">Salut,</p>
-              <h1 className="text-xl font-bold">{currentUser.name.split(" ")[0]} !</h1>
-            </div>
-          </div>
-          <div className="flex items-center gap-4">
-            <Badge variant="outline" className="bg-primary/10 border-primary/30 text-primary">
-              <Star className="w-3 h-3 mr-1" />
-              #{userRank?.rank || currentUser.rank}
-            </Badge>
-            <Badge variant="outline" className="bg-accent/10 border-accent/30 text-accent">
-              <Zap className="w-3 h-3 mr-1" />
-              {currentUser.xp.toLocaleString()} XP
-            </Badge>
-            <Badge variant="outline" className="bg-orange-500/10 border-orange-500/30 text-orange-500">
-              <Flame className="w-3 h-3 mr-1" />
-              3 🔥
-            </Badge>
-          </div>
-        </div>
-      </Card>
+    <div className="space-y-8">
+      {/* Welcome header */}
+      <div>
+        <h1 className="text-2xl font-bold text-foreground">
+          Bonjour, {currentUser.name.split(" ")[0]}
+        </h1>
+        <p className="text-muted-foreground mt-1">
+          Prêt pour ta prochaine session de padel ?
+        </p>
+      </div>
 
-      {/* Quick stats */}
-      <section>
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="font-semibold">Tes stats</h2>
-        </div>
-        <StatsCard />
-      </section>
-
-      {/* XP Progress */}
-      <section>
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="font-semibold">Progression</h2>
-        </div>
-        <XPProgress />
-      </section>
-
-      {/* Upcoming sessions */}
-      <section>
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="font-semibold">Sessions à venir</h2>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="text-primary"
-            onClick={() => onNavigate("search")}
-          >
-            Voir tout
-            <ChevronRight className="w-4 h-4 ml-1" />
-          </Button>
-        </div>
-        <div className="space-y-3">
-          {upcomingSessions.map((session) => (
-            <SessionCard key={session.id} session={session} compact />
-          ))}
-        </div>
-      </section>
-
-      {/* Recent matches */}
-      <section>
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="font-semibold">Derniers matchs</h2>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="text-primary"
-            onClick={() => onNavigate("profile")}
-          >
-            Historique
-            <ChevronRight className="w-4 h-4 ml-1" />
-          </Button>
-        </div>
-        <div className="space-y-3">
-          {recentMatches.map((match) => (
-            <MatchCard key={match.id} match={match} />
-          ))}
-        </div>
-      </section>
-
-      {/* Top players teaser */}
-      <section>
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="font-semibold">Top joueurs</h2>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="text-primary"
-            onClick={() => onNavigate("ranking")}
-          >
-            Classement
-            <ChevronRight className="w-4 h-4 ml-1" />
-          </Button>
-        </div>
-        <Card className="p-4 bg-card border-border">
-          <div className="flex items-center justify-around">
-            {leaderboard.slice(0, 3).map((entry, index) => (
-              <div key={entry.player.id} className="flex flex-col items-center gap-2">
-                <div className={cn(
-                  "relative",
-                  index === 0 && "transform scale-110"
-                )}>
-                  <Avatar className={cn(
-                    "border-2",
-                    index === 0 ? "w-14 h-14 border-amber-400" :
-                    index === 1 ? "w-12 h-12 border-slate-400" :
-                    "w-12 h-12 border-amber-700"
-                  )}>
-                    <AvatarImage src={entry.player.avatar} alt={entry.player.name} />
-                    <AvatarFallback>{entry.player.name.charAt(0)}</AvatarFallback>
-                  </Avatar>
-                  <div className={cn(
-                    "absolute -bottom-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold",
-                    index === 0 ? "bg-amber-400 text-amber-950" :
-                    index === 1 ? "bg-slate-400 text-slate-950" :
-                    "bg-amber-700 text-amber-100"
-                  )}>
-                    {index + 1}
-                  </div>
-                </div>
-                <div className="text-center">
-                  <p className="text-sm font-medium">{entry.player.name.split(" ")[0]}</p>
-                  <p className="text-xs text-muted-foreground">{entry.points} pts</p>
-                </div>
+      {/* Stats cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-lg bg-primary/10">
+                <Trophy className="w-5 h-5 text-primary" />
               </div>
-            ))}
-          </div>
+              <div>
+                <p className="text-2xl font-bold text-foreground">{currentUser.wins}</p>
+                <p className="text-sm text-muted-foreground">Victoires</p>
+              </div>
+            </div>
+          </CardContent>
         </Card>
-      </section>
+
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-lg bg-emerald-100">
+                <Target className="w-5 h-5 text-emerald-600" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-foreground">{winRate}%</p>
+                <p className="text-sm text-muted-foreground">Win rate</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-lg bg-amber-100">
+                <TrendingUp className="w-5 h-5 text-amber-600" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-foreground">#{currentUser.rank}</p>
+                <p className="text-sm text-muted-foreground">Classement</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-lg bg-blue-100">
+                <Calendar className="w-5 h-5 text-blue-600" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-foreground">{currentUser.wins + currentUser.losses}</p>
+                <p className="text-sm text-muted-foreground">Matchs joués</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid lg:grid-cols-3 gap-8">
+        {/* Main content */}
+        <div className="lg:col-span-2 space-y-8">
+          {/* Sessions à venir */}
+          <section>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-foreground">Sessions disponibles</h2>
+              <Button variant="ghost" size="sm" onClick={() => onNavigate("search")} className="text-primary hover:text-primary">
+                Voir tout
+                <ChevronRight className="w-4 h-4 ml-1" />
+              </Button>
+            </div>
+            <div className="space-y-3">
+              {upcomingSessions.map((session) => (
+                <SessionCard key={session.id} session={session} compact />
+              ))}
+            </div>
+          </section>
+
+          {/* Recent Activity */}
+          <section>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-foreground">Activité récente</h2>
+              <Button variant="ghost" size="sm" onClick={() => onNavigate("profile")} className="text-primary hover:text-primary">
+                Historique
+                <ChevronRight className="w-4 h-4 ml-1" />
+              </Button>
+            </div>
+            <Card>
+              <CardContent className="p-0 divide-y divide-border">
+                {recentMatches.map((match) => {
+                  const userInTeam1 = match.players.team1.some(p => p.id === currentUser.id)
+                  const userTeam = userInTeam1 ? "team1" : "team2"
+                  const opponentTeam = userInTeam1 ? "team2" : "team1"
+                  const isWinner = match.winner === userTeam
+
+                  return (
+                    <div key={match.id} className="p-4 flex items-center gap-4 hover:bg-muted/50 transition-colors">
+                      <div className={cn(
+                        "w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0",
+                        isWinner ? "bg-emerald-50" : "bg-slate-100"
+                      )}>
+                        {isWinner ? (
+                          <Trophy className="w-5 h-5 text-emerald-600" />
+                        ) : (
+                          <Target className="w-5 h-5 text-slate-500" />
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className={cn(
+                            "font-semibold",
+                            isWinner ? "text-emerald-600" : "text-slate-600"
+                          )}>
+                            {isWinner ? "Victoire" : "Défaite"}
+                          </span>
+                          <span className="text-muted-foreground">
+                            vs {match.players[opponentTeam].map(p => p.name.split(" ")[0]).join(" & ")}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-1.5 text-sm text-muted-foreground mt-1">
+                          <MapPin className="w-3.5 h-3.5" />
+                          <span>{match.club}</span>
+                          <span className="mx-1">·</span>
+                          <span>{new Date(match.date).toLocaleDateString("fr-FR", { day: "numeric", month: "short" })}</span>
+                        </div>
+                      </div>
+                      <div className="text-right flex-shrink-0">
+                        <p className="font-mono text-lg font-semibold text-foreground">
+                          {match.score[userTeam].reduce((a, b) => a + b, 0)} - {match.score[opponentTeam].reduce((a, b) => a + b, 0)}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {match.score[userTeam].join("-")} / {match.score[opponentTeam].join("-")}
+                        </p>
+                      </div>
+                    </div>
+                  )
+                })}
+              </CardContent>
+            </Card>
+          </section>
+        </div>
+
+        {/* Sidebar */}
+        <div className="space-y-6">
+          {/* Classement */}
+          <section>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-foreground">Classement</h2>
+              <Button variant="ghost" size="sm" onClick={() => onNavigate("ranking")} className="text-primary hover:text-primary">
+                Voir tout
+                <ChevronRight className="w-4 h-4 ml-1" />
+              </Button>
+            </div>
+            <Card>
+              <CardContent className="p-0 divide-y divide-border">
+                {topPlayers.map((entry, index) => (
+                  <div 
+                    key={entry.player.id} 
+                    className={cn(
+                      "p-3 flex items-center gap-3 hover:bg-muted/50 transition-colors",
+                      entry.player.id === currentUser.id && "bg-primary/5"
+                    )}
+                  >
+                    <span className={cn(
+                      "w-6 text-center font-bold text-sm",
+                      index === 0 && "text-amber-500",
+                      index === 1 && "text-slate-400",
+                      index === 2 && "text-amber-700",
+                      index > 2 && "text-muted-foreground"
+                    )}>
+                      {entry.rank}
+                    </span>
+                    <Avatar className="w-9 h-9">
+                      <AvatarImage src={entry.player.avatar} alt={entry.player.name} />
+                      <AvatarFallback className="text-xs">{entry.player.name.slice(0, 2)}</AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-foreground truncate">{entry.player.name}</p>
+                      <p className="text-xs text-muted-foreground">{entry.player.city}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-sm font-semibold text-foreground">{entry.points.toLocaleString()}</p>
+                      {entry.change !== "same" && (
+                        <span className={cn(
+                          "text-xs font-medium",
+                          entry.change === "up" ? "text-emerald-600" : "text-red-500"
+                        )}>
+                          {entry.change === "up" ? "+" : "-"}{entry.changeAmount}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          </section>
+
+          {/* Quick actions */}
+          <Card>
+            <CardContent className="p-5">
+              <h3 className="font-semibold text-foreground mb-4">Actions rapides</h3>
+              <div className="space-y-2">
+                <Button 
+                  className="w-full justify-start" 
+                  onClick={() => onNavigate("create")}
+                >
+                  <Calendar className="w-4 h-4 mr-2" />
+                  Créer une session
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="w-full justify-start"
+                  onClick={() => onNavigate("search")}
+                >
+                  <Target className="w-4 h-4 mr-2" />
+                  Trouver des partenaires
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
     </div>
   )
 }

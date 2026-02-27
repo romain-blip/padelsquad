@@ -1,51 +1,43 @@
 "use client"
 
 import { useState } from "react"
-import { Header } from "@/components/header"
-import { BottomNav } from "@/components/bottom-nav"
+import { Sidebar } from "@/components/sidebar"
 import { HomeView } from "@/components/views/home-view"
 import { SearchView } from "@/components/views/search-view"
 import { CreateView } from "@/components/views/create-view"
 import { RankingView } from "@/components/views/ranking-view"
 import { ProfileView } from "@/components/views/profile-view"
-import { cn } from "@/lib/utils"
 
 export default function PadelSquadApp() {
-  const [activeTab, setActiveTab] = useState("home")
-
-  const handleTabChange = (tab: string) => {
-    setActiveTab(tab)
-  }
+  const [activeView, setActiveView] = useState("home")
 
   const renderView = () => {
-    switch (activeTab) {
+    switch (activeView) {
       case "home":
-        return <HomeView onNavigate={handleTabChange} />
+        return <HomeView onNavigate={setActiveView} />
       case "search":
         return <SearchView />
       case "create":
-        return <CreateView onBack={() => setActiveTab("home")} />
+        return <CreateView onBack={() => setActiveView("home")} />
       case "ranking":
         return <RankingView />
       case "profile":
         return <ProfileView />
       default:
-        return <HomeView onNavigate={handleTabChange} />
+        return <HomeView onNavigate={setActiveView} />
     }
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      {activeTab !== "create" && <Header />}
+    <div className="min-h-screen bg-muted/30">
+      <Sidebar activeView={activeView} onViewChange={setActiveView} />
       
-      <main className={cn(
-        "px-4 py-4 max-w-lg mx-auto",
-        activeTab === "create" && "pt-4"
-      )}>
-        {renderView()}
+      {/* Main content */}
+      <main className="lg:pl-64 pt-16 lg:pt-0 pb-20 lg:pb-0">
+        <div className="max-w-6xl mx-auto p-6 lg:p-8">
+          {renderView()}
+        </div>
       </main>
-
-      <BottomNav activeTab={activeTab} onTabChange={handleTabChange} />
     </div>
   )
 }

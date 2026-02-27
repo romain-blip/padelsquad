@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next"
-import { Inter, Space_Grotesk } from "next/font/google"
+import { Inter } from "next/font/google"
 import "./globals.css"
 
 const inter = Inter({
@@ -7,22 +7,16 @@ const inter = Inter({
   variable: "--font-inter",
 })
 
-const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
-  variable: "--font-space-grotesk",
-})
-
 export const metadata: Metadata = {
   title: "Padel Squad - Trouve tes partenaires de padel",
-  description: "L'application pour trouver des partenaires de padel, rejoindre des sessions et grimper dans le classement. Gamifiée et sociale.",
+  description: "La plateforme pour trouver des partenaires de padel, rejoindre des sessions et suivre ta progression.",
   keywords: ["padel", "partenaires", "sport", "réservation", "classement", "matchs"],
 }
 
 export const viewport: Viewport = {
-  themeColor: "#0a0a0a",
+  themeColor: "#ffffff",
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
 }
 
 export default function RootLayout({
@@ -31,8 +25,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="fr" className="dark">
-      <body className={`${inter.variable} ${spaceGrotesk.variable} font-sans antialiased`}>
+    <html lang="fr">
+      <body className={`${inter.variable} font-sans antialiased`}>
         {children}
       </body>
     </html>

@@ -1,10 +1,11 @@
 "use client"
 
 import { useState } from "react"
-import { Search, SlidersHorizontal, MapPin, X } from "lucide-react"
+import { Search, SlidersHorizontal, MapPin, X, Calendar } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { Card, CardContent } from "@/components/ui/card"
 import { SessionCard } from "@/components/session-card"
 import { sessions } from "@/lib/mock-data"
 import {
@@ -57,143 +58,111 @@ export function SearchView() {
   }
 
   return (
-    <div className="space-y-4 pb-24">
+    <div className="space-y-6">
       {/* Search header */}
       <div>
-        <h1 className="text-2xl font-bold mb-1">Explorer</h1>
-        <p className="text-muted-foreground text-sm">
-          Trouve ta prochaine session de padel
+        <h1 className="text-2xl font-bold text-foreground">Trouver une session</h1>
+        <p className="text-muted-foreground mt-1">
+          Rejoins une session de padel près de chez toi
         </p>
       </div>
 
       {/* Search and filters */}
-      <div className="flex items-center gap-2">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-          <Input
-            placeholder="Club, ville, joueur..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10"
-          />
-        </div>
-        <Sheet open={showFilters} onOpenChange={setShowFilters}>
-          <SheetTrigger asChild>
-            <Button
-              variant="outline"
-              size="icon"
-              className={cn(hasActiveFilters && "border-primary text-primary")}
-            >
-              <SlidersHorizontal className="w-4 h-4" />
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="bottom" className="rounded-t-3xl">
-            <SheetHeader>
-              <SheetTitle>Filtres</SheetTitle>
-            </SheetHeader>
-            <div className="space-y-6 py-6">
-              <div className="space-y-2">
-                <Label>Ville</Label>
-                <Select value={selectedCity} onValueChange={setSelectedCity}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {cities.map((city) => (
-                      <SelectItem key={city} value={city}>
-                        {city}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label>Niveau</Label>
-                <Select value={selectedLevel} onValueChange={setSelectedLevel}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {levels.map((level) => (
-                      <SelectItem key={level} value={level}>
-                        <span className="capitalize">
-                          {level === "Tous" ? "Tous les niveaux" : level}
-                        </span>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  className="flex-1"
-                  onClick={clearFilters}
-                >
-                  Réinitialiser
-                </Button>
-                <Button
-                  className="flex-1"
-                  onClick={() => setShowFilters(false)}
-                >
-                  Appliquer
-                </Button>
-              </div>
+      <Card>
+        <CardContent className="p-4">
+          <div className="flex flex-col lg:flex-row gap-4">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Club, ville, joueur..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10"
+              />
             </div>
-          </SheetContent>
-        </Sheet>
+            <div className="flex gap-3">
+              <Select value={selectedCity} onValueChange={setSelectedCity}>
+                <SelectTrigger className="w-[160px]">
+                  <MapPin className="w-4 h-4 mr-2 text-muted-foreground" />
+                  <SelectValue placeholder="Ville" />
+                </SelectTrigger>
+                <SelectContent>
+                  {cities.map((city) => (
+                    <SelectItem key={city} value={city}>
+                      {city === "Toutes" ? "Toutes les villes" : city}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <Select value={selectedLevel} onValueChange={setSelectedLevel}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Niveau" />
+                </SelectTrigger>
+                <SelectContent>
+                  {levels.map((level) => (
+                    <SelectItem key={level} value={level}>
+                      <span className="capitalize">
+                        {level === "Tous" ? "Tous les niveaux" : level}
+                      </span>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              {hasActiveFilters && (
+                <Button variant="ghost" size="sm" onClick={clearFilters} className="text-muted-foreground">
+                  <X className="w-4 h-4 mr-1" />
+                  Effacer
+                </Button>
+              )}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Results header */}
+      <div className="flex items-center justify-between">
+        <p className="text-sm text-muted-foreground">
+          {filteredSessions.length} session{filteredSessions.length > 1 ? "s" : ""} disponible{filteredSessions.length > 1 ? "s" : ""}
+        </p>
+        {hasActiveFilters && (
+          <div className="flex items-center gap-2">
+            {selectedCity !== "Toutes" && (
+              <Badge variant="secondary" className="gap-1">
+                <MapPin className="w-3 h-3" />
+                {selectedCity}
+              </Badge>
+            )}
+            {selectedLevel !== "Tous" && (
+              <Badge variant="secondary" className="capitalize">
+                {selectedLevel}
+              </Badge>
+            )}
+          </div>
+        )}
       </div>
 
-      {/* Active filters badges */}
-      {hasActiveFilters && (
-        <div className="flex items-center gap-2 flex-wrap">
-          {selectedCity !== "Toutes" && (
-            <Badge
-              variant="secondary"
-              className="gap-1 pr-1 cursor-pointer hover:bg-secondary/80"
-              onClick={() => setSelectedCity("Toutes")}
-            >
-              <MapPin className="w-3 h-3" />
-              {selectedCity}
-              <X className="w-3 h-3 ml-1" />
-            </Badge>
-          )}
-          {selectedLevel !== "Tous" && (
-            <Badge
-              variant="secondary"
-              className="gap-1 pr-1 cursor-pointer hover:bg-secondary/80 capitalize"
-              onClick={() => setSelectedLevel("Tous")}
-            >
-              {selectedLevel}
-              <X className="w-3 h-3 ml-1" />
-            </Badge>
-          )}
-        </div>
-      )}
-
-      {/* Results count */}
-      <p className="text-sm text-muted-foreground">
-        {filteredSessions.length} session{filteredSessions.length > 1 ? "s" : ""} disponible{filteredSessions.length > 1 ? "s" : ""}
-      </p>
-
-      {/* Sessions list */}
-      <div className="space-y-4">
+      {/* Sessions grid */}
+      <div className="grid md:grid-cols-2 gap-4">
         {filteredSessions.map((session) => (
           <SessionCard key={session.id} session={session} />
         ))}
       </div>
 
       {filteredSessions.length === 0 && (
-        <div className="text-center py-12">
-          <p className="text-muted-foreground">
-            Aucune session trouvée avec ces critères.
-          </p>
-          <Button variant="link" onClick={clearFilters} className="mt-2">
-            Réinitialiser les filtres
-          </Button>
-        </div>
+        <Card>
+          <CardContent className="py-12 text-center">
+            <Calendar className="w-12 h-12 mx-auto text-muted-foreground/50 mb-4" />
+            <p className="text-lg font-medium text-foreground">Aucune session trouvée</p>
+            <p className="text-muted-foreground mt-1">
+              Essaie de modifier tes critères de recherche
+            </p>
+            <Button variant="outline" onClick={clearFilters} className="mt-4">
+              Réinitialiser les filtres
+            </Button>
+          </CardContent>
+        </Card>
       )}
     </div>
   )

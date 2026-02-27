@@ -4,7 +4,7 @@ import { Calendar, Clock, MapPin, Users, Euro } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Session } from "@/lib/types"
 import { cn } from "@/lib/utils"
 
@@ -15,11 +15,11 @@ interface SessionCardProps {
 }
 
 const levelColors: Record<string, string> = {
-  "tous niveaux": "bg-blue-500/20 text-blue-400 border-blue-500/30",
-  "débutant": "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
-  "intermédiaire": "bg-amber-500/20 text-amber-400 border-amber-500/30",
-  "avancé": "bg-orange-500/20 text-orange-400 border-orange-500/30",
-  "pro": "bg-red-500/20 text-red-400 border-red-500/30",
+  "tous niveaux": "bg-slate-100 text-slate-700 border-0",
+  "débutant": "bg-emerald-50 text-emerald-700 border-0",
+  "intermédiaire": "bg-blue-50 text-blue-700 border-0",
+  "avancé": "bg-amber-50 text-amber-700 border-0",
+  "pro": "bg-red-50 text-red-700 border-0",
 }
 
 export function SessionCard({ session, onJoin, compact = false }: SessionCardProps) {
@@ -42,126 +42,142 @@ export function SessionCard({ session, onJoin, compact = false }: SessionCardPro
 
   if (compact) {
     return (
-      <Card className="p-4 bg-card border-border hover:border-primary/50 transition-all cursor-pointer group">
-        <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3 flex-1">
-            <Avatar className="w-10 h-10 border-2 border-border group-hover:border-primary transition-colors">
-              <AvatarImage src={session.host.avatar} alt={session.host.name} />
-              <AvatarFallback>{session.host.name.charAt(0)}</AvatarFallback>
-            </Avatar>
-            <div className="flex-1 min-w-0">
-              <p className="font-medium text-sm truncate">{session.club}</p>
-              <div className="flex items-center gap-2 text-muted-foreground text-xs">
-                <span>{formatDate(session.date)}</span>
-                <span>•</span>
-                <span>{session.time}</span>
+      <Card className="hover:bg-muted/50 transition-colors cursor-pointer">
+        <CardContent className="p-4">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3 flex-1 min-w-0">
+              <Avatar className="w-10 h-10">
+                <AvatarImage src={session.host.avatar} alt={session.host.name} />
+                <AvatarFallback>{session.host.name.charAt(0)}</AvatarFallback>
+              </Avatar>
+              <div className="flex-1 min-w-0">
+                <p className="font-medium text-foreground truncate">{session.club}</p>
+                <div className="flex items-center gap-1.5 text-muted-foreground text-sm mt-0.5">
+                  <MapPin className="w-3.5 h-3.5" />
+                  <span>{session.city}</span>
+                  <span className="mx-1">·</span>
+                  <Calendar className="w-3.5 h-3.5" />
+                  <span>{formatDate(session.date)}, {session.time}</span>
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <Badge className={cn("text-xs font-medium capitalize", levelColors[session.level])}>
+                {session.level}
+              </Badge>
+              <div className="text-right">
+                <p className="font-semibold text-foreground">{session.spotsTaken}/{session.spotsTotal}</p>
+                <p className={cn(
+                  "text-xs",
+                  isFull ? "text-muted-foreground" : "text-emerald-600"
+                )}>
+                  {isFull ? "Complet" : `${spotsLeft} dispo`}
+                </p>
               </div>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <Badge variant="outline" className={cn("text-xs", levelColors[session.level])}>
-              {session.spotsTaken}/{session.spotsTotal}
-            </Badge>
-          </div>
-        </div>
+        </CardContent>
       </Card>
     )
   }
 
   return (
-    <Card className="overflow-hidden bg-card border-border hover:border-primary/50 transition-all group">
-      {/* Header with host info */}
-      <div className="p-4 border-b border-border">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Avatar className="w-12 h-12 border-2 border-border group-hover:border-primary transition-colors">
-              <AvatarImage src={session.host.avatar} alt={session.host.name} />
-              <AvatarFallback>{session.host.name.charAt(0)}</AvatarFallback>
-            </Avatar>
-            <div>
-              <p className="font-semibold">{session.host.name}</p>
-              <div className="flex items-center gap-1 text-muted-foreground text-sm">
-                <span>#{session.host.rank}</span>
-                <span>•</span>
-                <span className="capitalize">{session.host.level}</span>
+    <Card className="overflow-hidden hover:shadow-md transition-shadow">
+      <CardContent className="p-0">
+        {/* Header */}
+        <div className="p-5 border-b border-border">
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex-1 min-w-0">
+              <h3 className="font-semibold text-lg text-foreground">{session.club}</h3>
+              <div className="flex items-center gap-1.5 text-sm text-muted-foreground mt-1">
+                <MapPin className="w-4 h-4" />
+                <span>{session.city}</span>
               </div>
             </div>
+            <Badge className={cn("capitalize font-medium shrink-0", levelColors[session.level])}>
+              {session.level}
+            </Badge>
           </div>
-          <Badge variant="outline" className={cn("capitalize", levelColors[session.level])}>
-            {session.level}
-          </Badge>
-        </div>
-      </div>
 
-      {/* Session details */}
-      <div className="p-4 space-y-4">
-        <div className="space-y-2">
-          <div className="flex items-center gap-2 text-sm">
-            <MapPin className="w-4 h-4 text-primary" />
-            <span className="font-medium">{session.club}</span>
-            <span className="text-muted-foreground">• {session.city}</span>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          {/* Date/Time/Price row */}
+          <div className="flex items-center gap-4 mt-4 text-sm">
+            <div className="flex items-center gap-1.5 text-muted-foreground">
               <Calendar className="w-4 h-4" />
-              <span>{formatDate(session.date)}</span>
+              <span className="font-medium text-foreground">{formatDate(session.date)}</span>
             </div>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <div className="flex items-center gap-1.5 text-muted-foreground">
               <Clock className="w-4 h-4" />
-              <span>{session.time} ({session.duration})</span>
+              <span>{session.time}</span>
+              <span className="text-muted-foreground/60">({session.duration})</span>
             </div>
+            {session.price && (
+              <div className="flex items-center gap-1.5">
+                <Euro className="w-4 h-4 text-muted-foreground" />
+                <span className="font-semibold text-foreground">{session.price}€</span>
+              </div>
+            )}
           </div>
-          {session.price && (
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Euro className="w-4 h-4" />
-              <span>{session.price}€ / personne</span>
-            </div>
-          )}
         </div>
 
+        {/* Description */}
         {session.description && (
-          <p className="text-sm text-muted-foreground">{session.description}</p>
+          <div className="px-5 py-4 border-b border-border">
+            <p className="text-sm text-muted-foreground leading-relaxed">{session.description}</p>
+          </div>
         )}
 
-        {/* Players spots */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Users className="w-4 h-4 text-muted-foreground" />
-            <div className="flex items-center -space-x-2">
-              {session.players.map((player) => (
-                <Avatar key={player.id} className="w-8 h-8 border-2 border-card">
-                  <AvatarImage src={player.avatar} alt={player.name} />
-                  <AvatarFallback>{player.name.charAt(0)}</AvatarFallback>
-                </Avatar>
-              ))}
-              {Array.from({ length: spotsLeft }).map((_, i) => (
-                <div
-                  key={i}
-                  className="w-8 h-8 rounded-full border-2 border-dashed border-muted-foreground/30 bg-muted/30 flex items-center justify-center"
-                >
-                  <span className="text-muted-foreground/50 text-xs">?</span>
-                </div>
-              ))}
+        {/* Footer */}
+        <div className="p-5 flex items-center justify-between bg-muted/30">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              <Avatar className="w-8 h-8">
+                <AvatarImage src={session.host.avatar} alt={session.host.name} />
+                <AvatarFallback className="text-xs">{session.host.name.charAt(0)}</AvatarFallback>
+              </Avatar>
+              <div>
+                <p className="text-sm font-medium text-foreground">{session.host.name}</p>
+                <p className="text-xs text-muted-foreground">Organisateur</p>
+              </div>
             </div>
+            
+            {session.players.length > 0 && (
+              <div className="flex items-center gap-2 ml-2 pl-4 border-l border-border">
+                <div className="flex -space-x-2">
+                  {session.players.slice(0, 3).map((player) => (
+                    <Avatar key={player.id} className="w-7 h-7 ring-2 ring-background">
+                      <AvatarImage src={player.avatar} alt={player.name} />
+                      <AvatarFallback className="text-xs">{player.name.charAt(0)}</AvatarFallback>
+                    </Avatar>
+                  ))}
+                </div>
+                <span className="text-sm text-muted-foreground">
+                  +{session.players.length}
+                </span>
+              </div>
+            )}
           </div>
-          <span className={cn(
-            "text-sm font-medium",
-            isFull ? "text-destructive" : "text-primary"
-          )}>
-            {isFull ? "Complet" : `${spotsLeft} place${spotsLeft > 1 ? "s" : ""}`}
-          </span>
-        </div>
 
-        {/* Action button */}
-        <Button
-          className="w-full"
-          variant={isFull ? "secondary" : "default"}
-          disabled={isFull}
-          onClick={onJoin}
-        >
-          {isFull ? "Session complète" : "Demander à rejoindre"}
-        </Button>
-      </div>
+          <div className="flex items-center gap-3">
+            <div className="text-right mr-2">
+              <p className={cn(
+                "text-sm font-semibold",
+                isFull ? "text-muted-foreground" : "text-emerald-600"
+              )}>
+                {isFull ? "Complet" : `${spotsLeft} place${spotsLeft > 1 ? "s" : ""}`}
+              </p>
+              <p className="text-xs text-muted-foreground">{session.spotsTaken}/{session.spotsTotal} joueurs</p>
+            </div>
+            <Button
+              size="sm"
+              variant={isFull ? "secondary" : "default"}
+              disabled={isFull}
+              onClick={onJoin}
+            >
+              {isFull ? "Complet" : "Rejoindre"}
+            </Button>
+          </div>
+        </div>
+      </CardContent>
     </Card>
   )
 }
