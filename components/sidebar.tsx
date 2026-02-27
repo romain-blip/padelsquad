@@ -37,9 +37,9 @@ export function Sidebar({ activeView, onViewChange }: SidebarProps) {
   return (
     <>
       {/* Mobile header */}
-      <header className="lg:hidden fixed top-0 left-0 right-0 h-14 bg-card border-b border-border z-50 flex items-center justify-between px-4">
+      <header className="lg:hidden fixed top-0 left-0 right-0 h-14 bg-background/95 backdrop-blur-md border-b border-border z-50 flex items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/20">
             <span className="text-primary-foreground font-bold text-sm">PS</span>
           </div>
           <span className="font-semibold text-foreground">Padel Squad</span>
@@ -64,7 +64,7 @@ export function Sidebar({ activeView, onViewChange }: SidebarProps) {
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed top-0 left-0 h-full bg-card border-r border-border z-50 transition-transform duration-300",
+          "fixed top-0 left-0 h-full bg-card/50 backdrop-blur-xl border-r border-border z-50 transition-transform duration-300",
           "w-64 lg:translate-x-0",
           mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         )}
@@ -73,7 +73,7 @@ export function Sidebar({ activeView, onViewChange }: SidebarProps) {
           {/* Logo */}
           <div className="h-16 flex items-center px-6 border-b border-border">
             <Link href="/" className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center">
+              <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg shadow-primary/25">
                 <span className="text-primary-foreground font-bold text-sm">PS</span>
               </div>
               <span className="font-semibold text-lg text-foreground">Padel Squad</span>
@@ -91,9 +91,9 @@ export function Sidebar({ activeView, onViewChange }: SidebarProps) {
                       setMobileOpen(false)
                     }}
                     className={cn(
-                      "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
+                      "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200",
                       activeView === item.id
-                        ? "bg-primary text-primary-foreground"
+                        ? "bg-gradient-to-r from-primary/20 to-primary/5 text-primary border border-primary/30 shadow-sm shadow-primary/10"
                         : "text-muted-foreground hover:bg-muted hover:text-foreground"
                     )}
                   >
@@ -131,20 +131,20 @@ export function Sidebar({ activeView, onViewChange }: SidebarProps) {
       </aside>
 
       {/* Mobile bottom nav */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-card border-t border-border z-40">
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-md border-t border-border z-40">
         <div className="flex items-center justify-around py-2 safe-area-pb">
           {navItems.slice(0, 5).map((item) => (
             <button
               key={item.id}
               onClick={() => onViewChange(item.id)}
               className={cn(
-                "flex flex-col items-center gap-1 p-2 rounded-lg transition-colors min-w-[56px]",
+                "flex flex-col items-center gap-1 p-2 rounded-xl transition-all duration-200 min-w-[56px]",
                 activeView === item.id
-                  ? "text-primary"
+                  ? "text-primary bg-primary/10"
                   : "text-muted-foreground"
               )}
             >
-              <item.icon className={cn("h-5 w-5", activeView === item.id && "stroke-[2.5px]")} />
+              <item.icon className={cn("h-5 w-5", activeView === item.id && "drop-shadow-[0_0_8px_hsl(var(--primary))]")} />
               <span className="text-[10px] font-medium">{item.label.split(" ")[0]}</span>
             </button>
           ))}

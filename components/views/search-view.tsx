@@ -60,15 +60,16 @@ export function SearchView() {
   return (
     <div className="space-y-6">
       {/* Search header */}
-      <div>
-        <h1 className="text-2xl font-bold text-foreground">Trouver une session</h1>
-        <p className="text-muted-foreground mt-1">
-          Rejoins une session de padel près de chez toi
+      <div className="relative">
+        <div className="absolute -top-20 right-0 w-64 h-64 bg-accent/10 rounded-full blur-3xl pointer-events-none" />
+        <h1 className="text-2xl font-bold text-foreground relative">Trouver une session</h1>
+        <p className="text-muted-foreground mt-1 relative">
+          Rejoins une session de padel pres de chez toi
         </p>
       </div>
 
       {/* Search and filters */}
-      <Card className="border-0 shadow-sm">
+      <Card className="border border-border/50 bg-card/50 backdrop-blur-sm">
         <CardContent className="p-4">
           <div className="flex flex-col lg:flex-row gap-4">
             <div className="relative flex-1">
@@ -77,12 +78,12 @@ export function SearchView() {
                 placeholder="Club, ville, joueur..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
+                className="pl-10 bg-muted/50 border-border/50 focus:border-primary/50 focus:ring-primary/20"
               />
             </div>
             <div className="flex gap-3">
               <Select value={selectedCity} onValueChange={setSelectedCity}>
-                <SelectTrigger className="w-[160px]">
+                <SelectTrigger className="w-[160px] bg-muted/50 border-border/50">
                   <MapPin className="w-4 h-4 mr-2 text-muted-foreground" />
                   <SelectValue placeholder="Ville" />
                 </SelectTrigger>
@@ -96,7 +97,7 @@ export function SearchView() {
               </Select>
 
               <Select value={selectedLevel} onValueChange={setSelectedLevel}>
-                <SelectTrigger className="w-[180px]">
+                <SelectTrigger className="w-[180px] bg-muted/50 border-border/50">
                   <SelectValue placeholder="Niveau" />
                 </SelectTrigger>
                 <SelectContent>
@@ -129,13 +130,13 @@ export function SearchView() {
         {hasActiveFilters && (
           <div className="flex items-center gap-2">
             {selectedCity !== "Toutes" && (
-              <Badge variant="secondary" className="gap-1">
+              <Badge variant="secondary" className="gap-1 bg-primary/10 text-primary border border-primary/20">
                 <MapPin className="w-3 h-3" />
                 {selectedCity}
               </Badge>
             )}
             {selectedLevel !== "Tous" && (
-              <Badge variant="secondary" className="capitalize">
+              <Badge variant="secondary" className="capitalize bg-accent/10 text-accent border border-accent/20">
                 {selectedLevel}
               </Badge>
             )}
@@ -151,15 +152,17 @@ export function SearchView() {
       </div>
 
       {filteredSessions.length === 0 && (
-        <Card className="border-0 shadow-sm">
+        <Card className="border border-border/50 bg-card/50 backdrop-blur-sm">
           <CardContent className="py-12 text-center">
-            <Calendar className="w-12 h-12 mx-auto text-primary/30 mb-4" />
-            <p className="text-lg font-medium text-foreground">Aucune session trouvée</p>
+            <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-primary/10 flex items-center justify-center">
+              <Calendar className="w-8 h-8 text-primary" />
+            </div>
+            <p className="text-lg font-medium text-foreground">Aucune session trouvee</p>
             <p className="text-muted-foreground mt-1">
-              Essaie de modifier tes critères de recherche
+              Essaie de modifier tes criteres de recherche
             </p>
-            <Button variant="outline" onClick={clearFilters} className="mt-4">
-              Réinitialiser les filtres
+            <Button variant="outline" onClick={clearFilters} className="mt-4 border-border/50 hover:bg-muted/50">
+              Reinitialiser les filtres
             </Button>
           </CardContent>
         </Card>

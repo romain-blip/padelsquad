@@ -34,10 +34,11 @@ export function ProfileView() {
   return (
     <div className="space-y-6">
       {/* Profile header */}
-      <Card className="border-0 shadow-sm">
-        <CardContent className="p-6">
+      <Card className="border border-border/50 bg-gradient-to-br from-card via-card to-primary/5 overflow-hidden relative">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
+        <CardContent className="p-6 relative">
           <div className="flex flex-col md:flex-row md:items-start gap-6">
-            <Avatar className="w-24 h-24">
+            <Avatar className="w-24 h-24 ring-4 ring-primary/20 shadow-xl shadow-primary/20">
               <AvatarImage src={currentUser.avatar} alt={currentUser.name} />
               <AvatarFallback className="text-2xl">{currentUser.name.charAt(0)}</AvatarFallback>
             </Avatar>
@@ -57,17 +58,17 @@ export function ProfileView() {
                     </div>
                   </div>
                 </div>
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" className="border-border/50 hover:bg-muted/50">
                   <Settings className="w-4 h-4 mr-2" />
-                  Paramètres
+                  Parametres
                 </Button>
               </div>
 
               <div className="flex items-center gap-3 mt-4">
-                <Badge className="bg-primary/10 text-primary border-0">
+                <Badge className="bg-primary/10 text-primary border border-primary/20">
                   #{userEntry?.rank || currentUser.rank} au classement
                 </Badge>
-                <Badge variant="outline" className="capitalize">
+                <Badge variant="outline" className="capitalize border-border/50">
                   Niveau {currentUser.level}
                 </Badge>
               </div>
@@ -78,11 +79,11 @@ export function ProfileView() {
 
       {/* Stats grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="border-0 shadow-sm">
+        <Card className="border border-border/50 bg-card/50 backdrop-blur-sm group hover:border-emerald-500/30 transition-all">
           <CardContent className="p-5">
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-xl bg-emerald-50">
-                <Trophy className="w-5 h-5 text-emerald-600" />
+              <div className="p-3 rounded-xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 group-hover:shadow-lg group-hover:shadow-emerald-500/20 transition-shadow">
+                <Trophy className="w-5 h-5 text-emerald-400" />
               </div>
               <div>
                 <p className="text-2xl font-bold text-foreground">{currentUser.wins}</p>
@@ -91,23 +92,23 @@ export function ProfileView() {
             </div>
           </CardContent>
         </Card>
-        <Card className="border-0 shadow-sm">
+        <Card className="border border-border/50 bg-card/50 backdrop-blur-sm group hover:border-muted-foreground/30 transition-all">
           <CardContent className="p-5">
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-xl bg-slate-100">
-                <Target className="w-5 h-5 text-slate-600" />
+              <div className="p-3 rounded-xl bg-muted/50 group-hover:shadow-lg transition-shadow">
+                <Target className="w-5 h-5 text-muted-foreground" />
               </div>
               <div>
                 <p className="text-2xl font-bold text-foreground">{currentUser.losses}</p>
-                <p className="text-sm text-muted-foreground">Défaites</p>
+                <p className="text-sm text-muted-foreground">Defaites</p>
               </div>
             </div>
           </CardContent>
         </Card>
-        <Card className="border-0 shadow-sm">
+        <Card className="border border-border/50 bg-card/50 backdrop-blur-sm group hover:border-accent/30 transition-all">
           <CardContent className="p-5">
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-xl bg-accent/10">
+              <div className="p-3 rounded-xl bg-gradient-to-br from-accent/20 to-accent/5 group-hover:shadow-lg group-hover:shadow-accent/20 transition-shadow">
                 <TrendingUp className="w-5 h-5 text-accent" />
               </div>
               <div>
@@ -117,15 +118,15 @@ export function ProfileView() {
             </div>
           </CardContent>
         </Card>
-        <Card className="border-0 shadow-sm">
+        <Card className="border border-border/50 bg-card/50 backdrop-blur-sm group hover:border-primary/30 transition-all">
           <CardContent className="p-5">
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-xl bg-primary/10">
+              <div className="p-3 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 group-hover:shadow-lg group-hover:shadow-primary/20 transition-shadow">
                 <Users className="w-5 h-5 text-primary" />
               </div>
               <div>
                 <p className="text-2xl font-bold text-foreground">{currentUser.wins + currentUser.losses}</p>
-                <p className="text-sm text-muted-foreground">Matchs joués</p>
+                <p className="text-sm text-muted-foreground">Matchs joues</p>
               </div>
             </div>
           </CardContent>
@@ -134,15 +135,15 @@ export function ProfileView() {
 
       {/* Tabs */}
       <Tabs defaultValue="history" className="w-full">
-        <TabsList className="w-full max-w-md">
-          <TabsTrigger value="history" className="flex-1">Historique</TabsTrigger>
-          <TabsTrigger value="stats" className="flex-1">Statistiques</TabsTrigger>
-          <TabsTrigger value="partners" className="flex-1">Partenaires</TabsTrigger>
+        <TabsList className="w-full max-w-md bg-muted/50 border border-border/50 p-1">
+          <TabsTrigger value="history" className="flex-1 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg data-[state=active]:shadow-primary/25">Historique</TabsTrigger>
+          <TabsTrigger value="stats" className="flex-1 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg data-[state=active]:shadow-primary/25">Statistiques</TabsTrigger>
+          <TabsTrigger value="partners" className="flex-1 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg data-[state=active]:shadow-primary/25">Partenaires</TabsTrigger>
         </TabsList>
 
         <TabsContent value="history" className="mt-6">
-          <Card className="border-0 shadow-sm">
-            <CardContent className="p-0 divide-y divide-border">
+          <Card className="border border-border/50 bg-card/50 backdrop-blur-sm">
+            <CardContent className="p-0 divide-y divide-border/50">
               {matches.map((match) => {
                 const userInTeam1 = match.players.team1.some(p => p.id === currentUser.id)
                 const userTeam = userInTeam1 ? "team1" : "team2"
@@ -150,24 +151,24 @@ export function ProfileView() {
                 const isWinner = match.winner === userTeam
 
                 return (
-                  <div key={match.id} className="p-4 flex items-center gap-4 hover:bg-muted/50 transition-colors">
+                  <div key={match.id} className="p-4 flex items-center gap-4 hover:bg-muted/30 transition-colors">
                     <div className={cn(
-                      "w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0",
-                      isWinner ? "bg-emerald-50" : "bg-slate-100"
+                      "w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0",
+                      isWinner ? "bg-gradient-to-br from-emerald-500/20 to-emerald-500/5" : "bg-muted/50"
                     )}>
                       {isWinner ? (
-                        <Trophy className="w-5 h-5 text-emerald-600" />
+                        <Trophy className="w-5 h-5 text-emerald-400" />
                       ) : (
-                        <Target className="w-5 h-5 text-slate-500" />
+                        <Target className="w-5 h-5 text-muted-foreground" />
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className={cn(
                           "font-semibold",
-                          isWinner ? "text-emerald-600" : "text-slate-600"
+                          isWinner ? "text-emerald-400" : "text-muted-foreground"
                         )}>
-                          {isWinner ? "Victoire" : "Défaite"}
+                          {isWinner ? "Victoire" : "Defaite"}
                         </span>
                         <span className="text-muted-foreground">
                           vs {match.players[opponentTeam].map(p => p.name.split(" ")[0]).join(" & ")}
@@ -193,13 +194,13 @@ export function ProfileView() {
               })}
             </CardContent>
           </Card>
-          <Button variant="outline" className="w-full mt-4">
+          <Button variant="outline" className="w-full mt-4 border-border/50 hover:bg-muted/50">
             Charger plus de matchs
           </Button>
         </TabsContent>
 
         <TabsContent value="stats" className="mt-6 space-y-4">
-          <Card className="border-0 shadow-sm">
+          <Card className="border border-border/50 bg-card/50 backdrop-blur-sm">
             <CardContent className="p-5">
               <h3 className="font-semibold text-foreground mb-4">Performance</h3>
               <div className="space-y-5">
@@ -229,16 +230,16 @@ export function ProfileView() {
           </Card>
 
           <div className="grid md:grid-cols-2 gap-4">
-            <Card className="border-0 shadow-sm">
+            <Card className="border border-border/50 bg-gradient-to-br from-primary/10 to-card/50 backdrop-blur-sm">
               <CardContent className="p-5">
-                <h3 className="font-semibold text-foreground mb-3">Meilleure série</h3>
+                <h3 className="font-semibold text-foreground mb-3">Meilleure serie</h3>
                 <p className="text-3xl font-bold text-primary">5 victoires</p>
                 <p className="text-sm text-muted-foreground mt-1">Record personnel</p>
               </CardContent>
             </Card>
-            <Card className="border-0 shadow-sm">
+            <Card className="border border-border/50 bg-gradient-to-br from-accent/10 to-card/50 backdrop-blur-sm">
               <CardContent className="p-5">
-                <h3 className="font-semibold text-foreground mb-3">Série actuelle</h3>
+                <h3 className="font-semibold text-foreground mb-3">Serie actuelle</h3>
                 <p className="text-3xl font-bold text-accent">3 victoires</p>
                 <p className="text-sm text-muted-foreground mt-1">Continue comme ca !</p>
               </CardContent>
@@ -247,7 +248,7 @@ export function ProfileView() {
         </TabsContent>
 
         <TabsContent value="partners" className="mt-6">
-          <Card className="border-0 shadow-sm">
+          <Card className="border border-border/50 bg-card/50 backdrop-blur-sm">
             <CardContent className="p-5">
               <h3 className="font-semibold text-foreground mb-4">Partenaires fréquents</h3>
               <div className="space-y-4">
@@ -268,7 +269,7 @@ export function ProfileView() {
                       </div>
                       <div className="text-right">
                         <p className="font-semibold text-foreground">8 matchs</p>
-                        <p className="text-sm text-emerald-600">75% victoires</p>
+                        <p className="text-sm text-emerald-400">75% victoires</p>
                       </div>
                     </div>
                   )

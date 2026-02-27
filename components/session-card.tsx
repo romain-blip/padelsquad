@@ -15,11 +15,11 @@ interface SessionCardProps {
 }
 
 const levelColors: Record<string, string> = {
-  "tous niveaux": "bg-slate-100 text-slate-700",
-  "débutant": "bg-emerald-50 text-emerald-700",
-  "intermédiaire": "bg-primary/10 text-primary",
-  "avancé": "bg-accent/10 text-accent",
-  "pro": "bg-red-50 text-red-700",
+  "tous niveaux": "bg-muted text-muted-foreground border border-border/50",
+  "débutant": "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20",
+  "intermédiaire": "bg-primary/10 text-primary border border-primary/20",
+  "avancé": "bg-accent/10 text-accent border border-accent/20",
+  "pro": "bg-red-500/10 text-red-400 border border-red-500/20",
 }
 
 export function SessionCard({ session, onJoin, compact = false }: SessionCardProps) {
@@ -42,11 +42,11 @@ export function SessionCard({ session, onJoin, compact = false }: SessionCardPro
 
   if (compact) {
     return (
-      <Card className="hover:shadow-sm transition-all cursor-pointer border-0 shadow-sm">
+      <Card className="hover:border-primary/30 transition-all cursor-pointer border border-border/50 bg-card/50 backdrop-blur-sm group">
         <CardContent className="p-4">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-3 flex-1 min-w-0">
-              <Avatar className="w-10 h-10">
+              <Avatar className="w-10 h-10 ring-2 ring-border/50 group-hover:ring-primary/30 transition-all">
                 <AvatarImage src={session.host.avatar} alt={session.host.name} />
                 <AvatarFallback>{session.host.name.charAt(0)}</AvatarFallback>
               </Avatar>
@@ -68,8 +68,8 @@ export function SessionCard({ session, onJoin, compact = false }: SessionCardPro
               <div className="text-right">
                 <p className="font-semibold text-foreground">{session.spotsTaken}/{session.spotsTotal}</p>
                 <p className={cn(
-                  "text-xs",
-                  isFull ? "text-muted-foreground" : "text-emerald-600"
+                  "text-xs font-medium",
+                  isFull ? "text-muted-foreground" : "text-emerald-400"
                 )}>
                   {isFull ? "Complet" : `${spotsLeft} dispo`}
                 </p>
@@ -82,10 +82,10 @@ export function SessionCard({ session, onJoin, compact = false }: SessionCardPro
   }
 
   return (
-    <Card className="overflow-hidden hover:shadow-md transition-shadow border-0 shadow-sm">
+    <Card className="overflow-hidden hover:border-primary/30 transition-all border border-border/50 bg-card/50 backdrop-blur-sm">
       <CardContent className="p-0">
         {/* Header */}
-        <div className="p-5 border-b border-border">
+        <div className="p-5 border-b border-border/50">
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1 min-w-0">
               <h3 className="font-semibold text-lg text-foreground">{session.club}</h3>
@@ -121,13 +121,13 @@ export function SessionCard({ session, onJoin, compact = false }: SessionCardPro
 
         {/* Description */}
         {session.description && (
-          <div className="px-5 py-4 border-b border-border">
+          <div className="px-5 py-4 border-b border-border/50">
             <p className="text-sm text-muted-foreground leading-relaxed">{session.description}</p>
           </div>
         )}
 
         {/* Footer */}
-        <div className="p-5 flex items-center justify-between bg-muted/30">
+        <div className="p-5 flex items-center justify-between bg-muted/20">
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
               <Avatar className="w-8 h-8">
@@ -161,7 +161,7 @@ export function SessionCard({ session, onJoin, compact = false }: SessionCardPro
             <div className="text-right mr-2">
               <p className={cn(
                 "text-sm font-semibold",
-                isFull ? "text-muted-foreground" : "text-emerald-600"
+                isFull ? "text-muted-foreground" : "text-emerald-400"
               )}>
                 {isFull ? "Complet" : `${spotsLeft} place${spotsLeft > 1 ? "s" : ""}`}
               </p>
@@ -172,6 +172,7 @@ export function SessionCard({ session, onJoin, compact = false }: SessionCardPro
               variant={isFull ? "secondary" : "default"}
               disabled={isFull}
               onClick={onJoin}
+              className={cn(!isFull && "bg-gradient-to-r from-primary to-primary/80 shadow-lg shadow-primary/25")}
             >
               {isFull ? "Complet" : "Rejoindre"}
             </Button>

@@ -4,54 +4,52 @@
 
 @layer base {
   :root {
-    /* Padel-inspired color palette */
-    /* Background: warm off-white */
-    --background: 40 33% 98%;
-    --foreground: 215 25% 17%;
+    /* Dark futuristic theme - Premium sports app */
+    --background: 220 20% 7%;
+    --foreground: 0 0% 98%;
     
-    /* Cards: pure white with subtle warmth */
-    --card: 0 0% 100%;
-    --card-foreground: 215 25% 17%;
+    --card: 220 20% 10%;
+    --card-foreground: 0 0% 98%;
     
-    --popover: 0 0% 100%;
-    --popover-foreground: 215 25% 17%;
+    --popover: 220 20% 10%;
+    --popover-foreground: 0 0% 98%;
     
-    /* Primary: Deep blue (padel court blue) */
-    --primary: 217 91% 40%;
-    --primary-foreground: 0 0% 100%;
+    /* Primary: Electric cyan/teal */
+    --primary: 174 72% 56%;
+    --primary-foreground: 220 20% 7%;
     
-    /* Secondary: Light blue-gray */
-    --secondary: 214 32% 95%;
-    --secondary-foreground: 215 25% 17%;
+    /* Secondary: Dark elevated surface */
+    --secondary: 220 20% 14%;
+    --secondary-foreground: 0 0% 98%;
     
-    /* Muted: Warm gray */
-    --muted: 220 14% 96%;
-    --muted-foreground: 215 16% 47%;
+    /* Muted: Subtle gray */
+    --muted: 220 15% 18%;
+    --muted-foreground: 220 10% 55%;
     
-    /* Accent: Coral/Orange (padel ball color) */
-    --accent: 24 95% 53%;
+    /* Accent: Vibrant orange/coral */
+    --accent: 25 95% 58%;
     --accent-foreground: 0 0% 100%;
     
-    --destructive: 0 84% 60%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
     
-    --border: 220 13% 90%;
-    --input: 220 13% 90%;
-    --ring: 217 91% 40%;
-    --radius: 0.625rem;
+    --border: 220 15% 18%;
+    --input: 220 15% 18%;
+    --ring: 174 72% 56%;
+    --radius: 0.75rem;
     
-    /* Chart colors */
-    --chart-1: 217 91% 40%;
-    --chart-2: 24 95% 53%;
-    --chart-3: 160 60% 45%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 280 65% 60%;
+    /* Chart colors - vibrant for dark mode */
+    --chart-1: 174 72% 56%;
+    --chart-2: 25 95% 58%;
+    --chart-3: 142 71% 45%;
+    --chart-4: 280 85% 65%;
+    --chart-5: 199 89% 48%;
     
-    /* Custom colors for padel */
-    --success: 160 60% 40%;
+    /* Custom semantic colors */
+    --success: 142 71% 45%;
     --success-foreground: 0 0% 100%;
     --warning: 38 92% 50%;
-    --warning-foreground: 0 0% 100%;
+    --warning-foreground: 0 0% 7%;
   }
 }
 
