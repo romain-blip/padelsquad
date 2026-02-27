@@ -15,11 +15,11 @@ interface SessionCardProps {
 }
 
 const levelColors: Record<string, string> = {
-  "tous niveaux": "bg-slate-100 text-slate-700 border-0",
-  "débutant": "bg-emerald-50 text-emerald-700 border-0",
-  "intermédiaire": "bg-blue-50 text-blue-700 border-0",
-  "avancé": "bg-amber-50 text-amber-700 border-0",
-  "pro": "bg-red-50 text-red-700 border-0",
+  "tous niveaux": "bg-slate-100 text-slate-700",
+  "débutant": "bg-emerald-50 text-emerald-700",
+  "intermédiaire": "bg-primary/10 text-primary",
+  "avancé": "bg-accent/10 text-accent",
+  "pro": "bg-red-50 text-red-700",
 }
 
 export function SessionCard({ session, onJoin, compact = false }: SessionCardProps) {
@@ -42,7 +42,7 @@ export function SessionCard({ session, onJoin, compact = false }: SessionCardPro
 
   if (compact) {
     return (
-      <Card className="hover:bg-muted/50 transition-colors cursor-pointer">
+      <Card className="hover:shadow-sm transition-all cursor-pointer border-0 shadow-sm">
         <CardContent className="p-4">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -82,7 +82,7 @@ export function SessionCard({ session, onJoin, compact = false }: SessionCardPro
   }
 
   return (
-    <Card className="overflow-hidden hover:shadow-md transition-shadow">
+    <Card className="overflow-hidden hover:shadow-md transition-shadow border-0 shadow-sm">
       <CardContent className="p-0">
         {/* Header */}
         <div className="p-5 border-b border-border">

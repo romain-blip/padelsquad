@@ -68,7 +68,7 @@ export function SearchView() {
       </div>
 
       {/* Search and filters */}
-      <Card>
+      <Card className="border-0 shadow-sm">
         <CardContent className="p-4">
           <div className="flex flex-col lg:flex-row gap-4">
             <div className="relative flex-1">
@@ -151,9 +151,9 @@ export function SearchView() {
       </div>
 
       {filteredSessions.length === 0 && (
-        <Card>
+        <Card className="border-0 shadow-sm">
           <CardContent className="py-12 text-center">
-            <Calendar className="w-12 h-12 mx-auto text-muted-foreground/50 mb-4" />
+            <Calendar className="w-12 h-12 mx-auto text-primary/30 mb-4" />
             <p className="text-lg font-medium text-foreground">Aucune session trouvée</p>
             <p className="text-muted-foreground mt-1">
               Essaie de modifier tes critères de recherche

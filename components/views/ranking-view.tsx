@@ -46,12 +46,12 @@ export function RankingView() {
 
       {/* Your position card */}
       {userEntry && (
-        <Card className="border-primary/20 bg-primary/5">
+        <Card className="border-0 shadow-sm bg-gradient-to-r from-primary/5 to-accent/5">
           <CardContent className="p-5">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center">
-                  <span className="text-2xl font-bold text-primary">#{userEntry.rank}</span>
+                <div className="w-14 h-14 rounded-full bg-primary flex items-center justify-center">
+                  <span className="text-2xl font-bold text-primary-foreground">#{userEntry.rank}</span>
                 </div>
                 <div>
                   <p className="font-semibold text-foreground">Ta position actuelle</p>
@@ -73,7 +73,7 @@ export function RankingView() {
       )}
 
       {/* Leaderboard table */}
-      <Card>
+      <Card className="border-0 shadow-sm">
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -160,23 +160,29 @@ export function RankingView() {
 
       {/* Community stats */}
       <div className="grid grid-cols-3 gap-4">
-        <Card>
+        <Card className="border-0 shadow-sm">
           <CardContent className="p-5 text-center">
-            <Users className="w-6 h-6 mx-auto mb-2 text-muted-foreground" />
+            <div className="w-10 h-10 mx-auto mb-3 rounded-xl bg-primary/10 flex items-center justify-center">
+              <Users className="w-5 h-5 text-primary" />
+            </div>
             <p className="text-2xl font-bold text-foreground">1,247</p>
             <p className="text-sm text-muted-foreground">Joueurs actifs</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="border-0 shadow-sm">
           <CardContent className="p-5 text-center">
-            <Calendar className="w-6 h-6 mx-auto mb-2 text-muted-foreground" />
+            <div className="w-10 h-10 mx-auto mb-3 rounded-xl bg-accent/10 flex items-center justify-center">
+              <Calendar className="w-5 h-5 text-accent" />
+            </div>
             <p className="text-2xl font-bold text-foreground">342</p>
             <p className="text-sm text-muted-foreground">Matchs/semaine</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="border-0 shadow-sm">
           <CardContent className="p-5 text-center">
-            <Trophy className="w-6 h-6 mx-auto mb-2 text-muted-foreground" />
+            <div className="w-10 h-10 mx-auto mb-3 rounded-xl bg-amber-50 flex items-center justify-center">
+              <Trophy className="w-5 h-5 text-amber-600" />
+            </div>
             <p className="text-2xl font-bold text-foreground">89</p>
             <p className="text-sm text-muted-foreground">Sessions/jour</p>
           </CardContent>

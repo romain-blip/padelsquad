@@ -43,10 +43,10 @@ export function CreateSessionForm({ onSuccess }: CreateSessionFormProps) {
 
   if (isSubmitted) {
     return (
-      <Card>
+      <Card className="border-0 shadow-sm">
         <CardContent className="p-8 text-center">
-          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-emerald-100 flex items-center justify-center">
-            <Check className="w-8 h-8 text-emerald-600" />
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
+            <Check className="w-8 h-8 text-primary" />
           </div>
           <h3 className="text-xl font-bold text-foreground mb-2">Session créée avec succès</h3>
           <p className="text-muted-foreground">
@@ -59,10 +59,10 @@ export function CreateSessionForm({ onSuccess }: CreateSessionFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <Card>
+      <Card className="border-0 shadow-sm">
         <CardContent className="p-5 space-y-4">
           <h3 className="font-semibold text-foreground flex items-center gap-2">
-            <MapPin className="w-4 h-4 text-primary" />
+            <MapPin className="w-4 h-4 text-accent" />
             Lieu de la session
           </h3>
 
@@ -91,7 +91,7 @@ export function CreateSessionForm({ onSuccess }: CreateSessionFormProps) {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="border-0 shadow-sm">
         <CardContent className="p-5 space-y-4">
           <h3 className="font-semibold text-foreground flex items-center gap-2">
             <Calendar className="w-4 h-4 text-primary" />
@@ -139,10 +139,10 @@ export function CreateSessionForm({ onSuccess }: CreateSessionFormProps) {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="border-0 shadow-sm">
         <CardContent className="p-5 space-y-4">
           <h3 className="font-semibold text-foreground flex items-center gap-2">
-            <Users className="w-4 h-4 text-primary" />
+            <Users className="w-4 h-4 text-accent" />
             Détails de la session
           </h3>
 
@@ -196,10 +196,10 @@ export function CreateSessionForm({ onSuccess }: CreateSessionFormProps) {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="border-0 shadow-sm">
         <CardContent className="p-5 space-y-4">
           <h3 className="font-semibold text-foreground flex items-center gap-2">
-            <Info className="w-4 h-4 text-primary" />
+            <Info className="w-4 h-4 text-muted-foreground" />
             Description (optionnel)
           </h3>
           <Textarea

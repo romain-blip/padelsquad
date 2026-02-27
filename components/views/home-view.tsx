@@ -32,10 +32,10 @@ export function HomeView({ onNavigate }: HomeViewProps) {
 
       {/* Stats cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="p-4">
+        <Card className="border-0 shadow-sm">
+          <CardContent className="p-5">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-lg bg-primary/10">
+              <div className="p-3 rounded-xl bg-primary/10">
                 <Trophy className="w-5 h-5 text-primary" />
               </div>
               <div>
@@ -46,11 +46,11 @@ export function HomeView({ onNavigate }: HomeViewProps) {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardContent className="p-4">
+        <Card className="border-0 shadow-sm">
+          <CardContent className="p-5">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-lg bg-emerald-100">
-                <Target className="w-5 h-5 text-emerald-600" />
+              <div className="p-3 rounded-xl bg-accent/10">
+                <Target className="w-5 h-5 text-accent" />
               </div>
               <div>
                 <p className="text-2xl font-bold text-foreground">{winRate}%</p>
@@ -60,10 +60,10 @@ export function HomeView({ onNavigate }: HomeViewProps) {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardContent className="p-4">
+        <Card className="border-0 shadow-sm">
+          <CardContent className="p-5">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-lg bg-amber-100">
+              <div className="p-3 rounded-xl bg-amber-50">
                 <TrendingUp className="w-5 h-5 text-amber-600" />
               </div>
               <div>
@@ -74,11 +74,11 @@ export function HomeView({ onNavigate }: HomeViewProps) {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardContent className="p-4">
+        <Card className="border-0 shadow-sm">
+          <CardContent className="p-5">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-lg bg-blue-100">
-                <Calendar className="w-5 h-5 text-blue-600" />
+              <div className="p-3 rounded-xl bg-primary/10">
+                <Calendar className="w-5 h-5 text-primary" />
               </div>
               <div>
                 <p className="text-2xl font-bold text-foreground">{currentUser.wins + currentUser.losses}</p>
@@ -117,7 +117,7 @@ export function HomeView({ onNavigate }: HomeViewProps) {
                 <ChevronRight className="w-4 h-4 ml-1" />
               </Button>
             </div>
-            <Card>
+            <Card className="border-0 shadow-sm">
               <CardContent className="p-0 divide-y divide-border">
                 {recentMatches.map((match) => {
                   const userInTeam1 = match.players.team1.some(p => p.id === currentUser.id)
@@ -183,7 +183,7 @@ export function HomeView({ onNavigate }: HomeViewProps) {
                 <ChevronRight className="w-4 h-4 ml-1" />
               </Button>
             </div>
-            <Card>
+            <Card className="border-0 shadow-sm">
               <CardContent className="p-0 divide-y divide-border">
                 {topPlayers.map((entry, index) => (
                   <div 
@@ -228,7 +228,7 @@ export function HomeView({ onNavigate }: HomeViewProps) {
           </section>
 
           {/* Quick actions */}
-          <Card>
+          <Card className="border-0 shadow-sm bg-gradient-to-br from-primary/5 to-accent/5">
             <CardContent className="p-5">
               <h3 className="font-semibold text-foreground mb-4">Actions rapides</h3>
               <div className="space-y-2">

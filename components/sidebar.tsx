@@ -39,8 +39,8 @@ export function Sidebar({ activeView, onViewChange }: SidebarProps) {
       {/* Mobile header */}
       <header className="lg:hidden fixed top-0 left-0 right-0 h-14 bg-card border-b border-border z-50 flex items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-foreground flex items-center justify-center">
-            <span className="text-background font-bold text-sm">PS</span>
+          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+            <span className="text-primary-foreground font-bold text-sm">PS</span>
           </div>
           <span className="font-semibold text-foreground">Padel Squad</span>
         </Link>
@@ -73,8 +73,8 @@ export function Sidebar({ activeView, onViewChange }: SidebarProps) {
           {/* Logo */}
           <div className="h-16 flex items-center px-6 border-b border-border">
             <Link href="/" className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-foreground flex items-center justify-center">
-                <span className="text-background font-bold text-sm">PS</span>
+              <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center">
+                <span className="text-primary-foreground font-bold text-sm">PS</span>
               </div>
               <span className="font-semibold text-lg text-foreground">Padel Squad</span>
             </Link>
@@ -93,7 +93,7 @@ export function Sidebar({ activeView, onViewChange }: SidebarProps) {
                     className={cn(
                       "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
                       activeView === item.id
-                        ? "bg-foreground text-background"
+                        ? "bg-primary text-primary-foreground"
                         : "text-muted-foreground hover:bg-muted hover:text-foreground"
                     )}
                   >
@@ -140,7 +140,7 @@ export function Sidebar({ activeView, onViewChange }: SidebarProps) {
               className={cn(
                 "flex flex-col items-center gap-1 p-2 rounded-lg transition-colors min-w-[56px]",
                 activeView === item.id
-                  ? "text-foreground"
+                  ? "text-primary"
                   : "text-muted-foreground"
               )}
             >

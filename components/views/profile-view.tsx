@@ -34,7 +34,7 @@ export function ProfileView() {
   return (
     <div className="space-y-6">
       {/* Profile header */}
-      <Card>
+      <Card className="border-0 shadow-sm">
         <CardContent className="p-6">
           <div className="flex flex-col md:flex-row md:items-start gap-6">
             <Avatar className="w-24 h-24">
@@ -78,10 +78,10 @@ export function ProfileView() {
 
       {/* Stats grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card>
+        <Card className="border-0 shadow-sm">
           <CardContent className="p-5">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-lg bg-emerald-100">
+              <div className="p-3 rounded-xl bg-emerald-50">
                 <Trophy className="w-5 h-5 text-emerald-600" />
               </div>
               <div>
@@ -91,10 +91,10 @@ export function ProfileView() {
             </div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="border-0 shadow-sm">
           <CardContent className="p-5">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-lg bg-slate-100">
+              <div className="p-3 rounded-xl bg-slate-100">
                 <Target className="w-5 h-5 text-slate-600" />
               </div>
               <div>
@@ -104,11 +104,11 @@ export function ProfileView() {
             </div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="border-0 shadow-sm">
           <CardContent className="p-5">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-lg bg-primary/10">
-                <TrendingUp className="w-5 h-5 text-primary" />
+              <div className="p-3 rounded-xl bg-accent/10">
+                <TrendingUp className="w-5 h-5 text-accent" />
               </div>
               <div>
                 <p className="text-2xl font-bold text-foreground">{winRate}%</p>
@@ -117,11 +117,11 @@ export function ProfileView() {
             </div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="border-0 shadow-sm">
           <CardContent className="p-5">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-lg bg-blue-100">
-                <Users className="w-5 h-5 text-blue-600" />
+              <div className="p-3 rounded-xl bg-primary/10">
+                <Users className="w-5 h-5 text-primary" />
               </div>
               <div>
                 <p className="text-2xl font-bold text-foreground">{currentUser.wins + currentUser.losses}</p>
@@ -141,7 +141,7 @@ export function ProfileView() {
         </TabsList>
 
         <TabsContent value="history" className="mt-6">
-          <Card>
+          <Card className="border-0 shadow-sm">
             <CardContent className="p-0 divide-y divide-border">
               {matches.map((match) => {
                 const userInTeam1 = match.players.team1.some(p => p.id === currentUser.id)
@@ -199,7 +199,7 @@ export function ProfileView() {
         </TabsContent>
 
         <TabsContent value="stats" className="mt-6 space-y-4">
-          <Card>
+          <Card className="border-0 shadow-sm">
             <CardContent className="p-5">
               <h3 className="font-semibold text-foreground mb-4">Performance</h3>
               <div className="space-y-5">
@@ -229,25 +229,25 @@ export function ProfileView() {
           </Card>
 
           <div className="grid md:grid-cols-2 gap-4">
-            <Card>
+            <Card className="border-0 shadow-sm">
               <CardContent className="p-5">
                 <h3 className="font-semibold text-foreground mb-3">Meilleure série</h3>
                 <p className="text-3xl font-bold text-primary">5 victoires</p>
                 <p className="text-sm text-muted-foreground mt-1">Record personnel</p>
               </CardContent>
             </Card>
-            <Card>
+            <Card className="border-0 shadow-sm">
               <CardContent className="p-5">
                 <h3 className="font-semibold text-foreground mb-3">Série actuelle</h3>
-                <p className="text-3xl font-bold text-emerald-600">3 victoires</p>
-                <p className="text-sm text-muted-foreground mt-1">Continue comme ça !</p>
+                <p className="text-3xl font-bold text-accent">3 victoires</p>
+                <p className="text-sm text-muted-foreground mt-1">Continue comme ca !</p>
               </CardContent>
             </Card>
           </div>
         </TabsContent>
 
         <TabsContent value="partners" className="mt-6">
-          <Card>
+          <Card className="border-0 shadow-sm">
             <CardContent className="p-5">
               <h3 className="font-semibold text-foreground mb-4">Partenaires fréquents</h3>
               <div className="space-y-4">
