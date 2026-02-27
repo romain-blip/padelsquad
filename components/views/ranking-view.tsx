@@ -56,7 +56,7 @@ export function RankingView() {
                 <div>
                   <p className="font-semibold text-foreground">Ta position actuelle</p>
                   <p className="text-sm text-muted-foreground">
-                    {userEntry.points.toLocaleString()} points
+                    {userEntry.points} points
                   </p>
                 </div>
               </div>
@@ -131,7 +131,7 @@ export function RankingView() {
                       <span className="text-sm text-muted-foreground">{entry.player.losses}</span>
                     </td>
                     <td className="px-5 py-4 text-right">
-                      <span className="font-semibold text-foreground">{entry.points.toLocaleString()}</span>
+                      <span className="font-semibold text-foreground">{entry.points}</span>
                     </td>
                     <td className="px-5 py-4 text-right">
                       {entry.change === "same" ? (

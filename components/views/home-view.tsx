@@ -211,7 +211,7 @@ export function HomeView({ onNavigate }: HomeViewProps) {
                       <p className="text-xs text-muted-foreground">{entry.player.city}</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-semibold text-foreground">{entry.points.toLocaleString()}</p>
+                      <p className="text-sm font-semibold text-foreground">{entry.points}</p>
                       {entry.change !== "same" && (
                         <span className={cn(
                           "text-xs font-medium",
