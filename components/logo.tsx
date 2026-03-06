@@ -10,32 +10,78 @@ interface LogoProps {
 
 export function Logo({ size = "md", showText = true, className }: LogoProps) {
   const sizes = {
-    sm: { container: "w-8 h-8", ball: "w-2 h-2", text: "text-base", gap: "gap-2" },
-    md: { container: "w-10 h-10", ball: "w-2.5 h-2.5", text: "text-lg", gap: "gap-2.5" },
-    lg: { container: "w-12 h-12", ball: "w-3 h-3", text: "text-xl", gap: "gap-3" },
+    sm: { icon: 32, text: "text-base", gap: "gap-2" },
+    md: { icon: 36, text: "text-lg", gap: "gap-2.5" },
+    lg: { icon: 44, text: "text-xl", gap: "gap-3" },
   }
 
   const s = sizes[size]
 
   return (
     <div className={cn("flex items-center", s.gap, className)}>
-      {/* Logo mark - Stylized PS monogram */}
-      <div className={cn(
-        "relative rounded-xl flex items-center justify-center overflow-hidden",
-        "bg-gradient-to-br from-primary to-primary/80",
-        s.container
-      )}>
-        {/* PS Letters */}
-        <span className="font-black text-primary-foreground tracking-tighter" style={{ fontSize: size === "sm" ? "12px" : size === "md" ? "14px" : "18px" }}>
-          PS
-        </span>
+      {/* Logo mark - Padel racket with ball */}
+      <svg 
+        width={s.icon} 
+        height={s.icon} 
+        viewBox="0 0 48 48" 
+        fill="none" 
+        xmlns="http://www.w3.org/2000/svg"
+        className="flex-shrink-0"
+      >
+        {/* Racket head - rounded rectangle with holes */}
+        <rect 
+          x="8" 
+          y="4" 
+          width="24" 
+          height="32" 
+          rx="12" 
+          className="fill-primary"
+        />
         
-        {/* Orange accent ball */}
-        <div className={cn(
-          "absolute -bottom-0.5 -right-0.5 rounded-full bg-accent",
-          s.ball
-        )} />
-      </div>
+        {/* Racket holes pattern */}
+        <circle cx="14" cy="12" r="2" className="fill-background" />
+        <circle cx="20" cy="12" r="2" className="fill-background" />
+        <circle cx="26" cy="12" r="2" className="fill-background" />
+        <circle cx="14" cy="20" r="2" className="fill-background" />
+        <circle cx="20" cy="20" r="2" className="fill-background" />
+        <circle cx="26" cy="20" r="2" className="fill-background" />
+        <circle cx="14" cy="28" r="2" className="fill-background" />
+        <circle cx="20" cy="28" r="2" className="fill-background" />
+        <circle cx="26" cy="28" r="2" className="fill-background" />
+        
+        {/* Racket handle */}
+        <rect 
+          x="16" 
+          y="34" 
+          width="8" 
+          height="12" 
+          rx="2" 
+          className="fill-primary/70"
+        />
+        
+        {/* Handle grip lines */}
+        <line x1="16" y1="38" x2="24" y2="38" stroke="currentColor" strokeWidth="1" className="stroke-background/30" />
+        <line x1="16" y1="41" x2="24" y2="41" stroke="currentColor" strokeWidth="1" className="stroke-background/30" />
+        <line x1="16" y1="44" x2="24" y2="44" stroke="currentColor" strokeWidth="1" className="stroke-background/30" />
+        
+        {/* Padel ball */}
+        <circle 
+          cx="38" 
+          cy="14" 
+          r="8" 
+          className="fill-accent"
+        />
+        
+        {/* Ball curve line */}
+        <path 
+          d="M 34 10 Q 38 14 34 18" 
+          stroke="white" 
+          strokeWidth="1.5" 
+          fill="none" 
+          strokeLinecap="round"
+          opacity="0.6"
+        />
+      </svg>
 
       {/* Text */}
       {showText && (
