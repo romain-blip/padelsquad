@@ -4,58 +4,59 @@
 
 @layer base {
   :root {
-    /* Padel Squad - Electric Neon Theme */
+    /* Padel Squad - Court Clay Theme */
+    /* Inspired by real padel courts and Mediterranean club vibes */
     
-    --background: 240 15% 3%;
-    --foreground: 60 10% 95%;
+    --background: 30 8% 8%;
+    --foreground: 40 15% 92%;
     
-    --card: 240 12% 6%;
-    --card-foreground: 60 10% 95%;
+    --card: 28 10% 11%;
+    --card-foreground: 40 15% 92%;
     
-    --popover: 240 12% 8%;
-    --popover-foreground: 60 10% 95%;
+    --popover: 28 10% 13%;
+    --popover-foreground: 40 15% 92%;
     
-    /* Primary: Electric Lime - comme une balle de padel fluo */
-    --primary: 75 100% 45%;
-    --primary-foreground: 240 15% 3%;
+    /* Primary: Court Blue - bleu des murs de padel */
+    --primary: 210 65% 50%;
+    --primary-foreground: 0 0% 100%;
     
-    /* Secondary: Deep purple-black surface */
-    --secondary: 260 20% 10%;
-    --secondary-foreground: 60 10% 95%;
+    /* Secondary: Warm surface */
+    --secondary: 30 12% 15%;
+    --secondary-foreground: 40 15% 92%;
     
-    /* Muted: Purple-tinted dark */
-    --muted: 260 15% 13%;
-    --muted-foreground: 260 10% 55%;
+    /* Muted: Sand tones */
+    --muted: 35 10% 18%;
+    --muted-foreground: 35 8% 50%;
     
-    /* Accent: Hot Coral - energie et dynamisme */
-    --accent: 12 100% 60%;
+    /* Accent: Terra cotta orange - like clay courts */
+    --accent: 18 75% 55%;
     --accent-foreground: 0 0% 100%;
     
-    --destructive: 0 85% 55%;
+    --destructive: 0 65% 50%;
     --destructive-foreground: 0 0% 100%;
     
-    --border: 260 15% 15%;
-    --input: 260 15% 12%;
-    --ring: 75 100% 45%;
-    --radius: 0.75rem;
+    --border: 30 8% 18%;
+    --input: 30 8% 15%;
+    --ring: 210 65% 50%;
+    --radius: 0.5rem;
     
-    /* Chart colors - neon palette */
-    --chart-1: 75 100% 45%;
-    --chart-2: 12 100% 60%;
-    --chart-3: 180 100% 45%;
-    --chart-4: 45 100% 55%;
-    --chart-5: 280 100% 65%;
+    /* Chart colors */
+    --chart-1: 210 65% 50%;
+    --chart-2: 18 75% 55%;
+    --chart-3: 160 45% 45%;
+    --chart-4: 45 70% 50%;
+    --chart-5: 340 55% 55%;
     
     /* Semantic colors */
-    --success: 160 100% 40%;
+    --success: 160 50% 42%;
     --success-foreground: 0 0% 100%;
-    --warning: 45 100% 55%;
-    --warning-foreground: 0 0% 5%;
+    --warning: 40 85% 50%;
+    --warning-foreground: 30 8% 8%;
     
-    /* Custom brand colors */
-    --gold: 45 100% 55%;
-    --silver: 240 5% 70%;
-    --bronze: 25 90% 50%;
+    /* Podium colors */
+    --gold: 43 80% 52%;
+    --silver: 220 8% 65%;
+    --bronze: 25 60% 45%;
   }
 }
 
