@@ -1,8 +1,10 @@
 "use client"
 
 import { useState } from "react"
-import { ChevronUp, ChevronDown, Minus, MapPin } from "lucide-react"
+import { Trophy, Calendar, TrendingUp, TrendingDown, Users, MapPin, ChevronUp, ChevronDown, Minus, Globe, Building2 } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { leaderboard, currentUser } from "@/lib/mock-data"
 import { cn } from "@/lib/utils"
@@ -20,42 +22,52 @@ export function RankingView() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <p className="text-sm text-muted-foreground uppercase tracking-wider">Leaderboard</p>
-        <h1 className="text-3xl font-bold text-foreground mt-1">Classement</h1>
+      <div className="relative">
+        <div className="absolute -top-20 -left-20 w-72 h-72 bg-primary/8 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-10 right-10 w-48 h-48 bg-accent/8 rounded-full blur-3xl pointer-events-none" />
+        <h1 className="text-2xl font-bold text-foreground relative">Classement</h1>
+        <p className="text-muted-foreground mt-1 relative">
+          Suis ta progression et compare-toi aux autres joueurs
+        </p>
       </div>
 
       {/* Ranking type toggle */}
       <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-        <div className="flex border border-border rounded-md overflow-hidden w-fit">
-          <button
+        <div className="flex items-center p-1 bg-card border border-border rounded-xl w-fit">
+          <Button
+            variant="ghost"
+            size="sm"
             className={cn(
-              "px-4 py-2 text-sm font-medium transition-colors",
+              "rounded-lg px-5 py-2.5 text-sm font-medium transition-all gap-2",
               rankingType === "national"
-                ? "bg-primary text-primary-foreground"
+                ? "bg-primary text-primary-foreground shadow-lg shadow-primary/30"
                 : "text-muted-foreground hover:text-foreground hover:bg-muted"
             )}
             onClick={() => setRankingType("national")}
           >
+            <Globe className="w-4 h-4" />
             National
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
             className={cn(
-              "px-4 py-2 text-sm font-medium transition-colors border-l border-border",
+              "rounded-lg px-5 py-2.5 text-sm font-medium transition-all gap-2",
               rankingType === "departement"
-                ? "bg-primary text-primary-foreground"
+                ? "bg-accent text-accent-foreground shadow-lg shadow-accent/30"
                 : "text-muted-foreground hover:text-foreground hover:bg-muted"
             )}
             onClick={() => setRankingType("departement")}
           >
+            <Building2 className="w-4 h-4" />
             Departement
-          </button>
+          </Button>
         </div>
 
         {rankingType === "departement" && (
           <Select value={selectedDepartment} onValueChange={setSelectedDepartment}>
-            <SelectTrigger className="w-[200px] border-border">
-              <SelectValue placeholder="Departement" />
+            <SelectTrigger className="w-[220px] bg-card border-border">
+              <SelectValue placeholder="Choisir un departement" />
             </SelectTrigger>
             <SelectContent>
               {departments.map((dept) => (
@@ -67,12 +79,14 @@ export function RankingView() {
       </div>
 
       {/* Time filter tabs */}
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-1 p-1 bg-card border border-border rounded-lg w-fit">
         {timeFilters.map((filter) => (
-          <button
+          <Button
             key={filter}
+            variant="ghost"
+            size="sm"
             className={cn(
-              "px-3 py-1.5 text-xs font-medium rounded-md transition-colors",
+              "rounded-md px-3 py-1.5 text-xs font-medium transition-all",
               timeFilter === filter
                 ? "bg-muted text-foreground"
                 : "text-muted-foreground hover:text-foreground"
@@ -80,33 +94,44 @@ export function RankingView() {
             onClick={() => setTimeFilter(filter)}
           >
             {filter}
-          </button>
+          </Button>
         ))}
       </div>
 
       {/* Your position card */}
       {userEntry && (
-        <div className="border border-border rounded-md p-5 bg-card">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-5">
-              <div className="w-14 h-14 rounded-md bg-primary flex items-center justify-center">
-                <span className="text-xl font-bold text-primary-foreground">#{userEntry.rank}</span>
+        <Card className="border border-border bg-card overflow-hidden relative">
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-accent to-primary" />
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="relative">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center shadow-xl shadow-primary/25">
+                    <span className="text-2xl font-bold text-primary-foreground">#{userEntry.rank}</span>
+                  </div>
+                  <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-accent flex items-center justify-center shadow-lg">
+                    <TrendingUp className="w-3.5 h-3.5 text-accent-foreground" />
+                  </div>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground uppercase tracking-wide">
+                    {rankingType === "national" ? "Classement National" : `Classement ${selectedDepartment}`}
+                  </p>
+                  <p className="font-bold text-foreground text-2xl mt-0.5">
+                    {userEntry.points.toLocaleString()} <span className="text-sm font-normal text-muted-foreground">pts</span>
+                  </p>
+                </div>
               </div>
-              <div>
-                <p className="text-xs text-muted-foreground uppercase tracking-wider">
-                  {rankingType === "national" ? "National" : selectedDepartment}
-                </p>
-                <p className="font-bold text-foreground text-2xl mt-0.5">
-                  {userEntry.points.toLocaleString()} <span className="text-sm font-normal text-muted-foreground">pts</span>
-                </p>
+              <div className="text-right space-y-1">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/10 text-primary">
+                  <TrendingUp className="w-4 h-4" />
+                  <span className="font-bold">+50 pts</span>
+                </div>
+                <p className="text-xs text-muted-foreground">cette semaine</p>
               </div>
             </div>
-            <div className="text-right">
-              <p className="text-sm font-semibold text-accent">+50 pts</p>
-              <p className="text-xs text-muted-foreground">cette semaine</p>
-            </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       )}
 
       {/* Leaderboard table */}
@@ -199,19 +224,34 @@ export function RankingView() {
       </Card>
 
       {/* Community stats */}
-      <div className="grid grid-cols-3 gap-3">
-        <div className="border border-border rounded-md p-4 text-center">
-          <p className="text-2xl font-bold text-foreground">1,247</p>
-          <p className="text-xs text-muted-foreground mt-1 uppercase tracking-wider">Joueurs</p>
-        </div>
-        <div className="border border-border rounded-md p-4 text-center">
-          <p className="text-2xl font-bold text-foreground">342</p>
-          <p className="text-xs text-muted-foreground mt-1 uppercase tracking-wider">Matchs/sem</p>
-        </div>
-        <div className="border border-border rounded-md p-4 text-center">
-          <p className="text-2xl font-bold text-foreground">89</p>
-          <p className="text-xs text-muted-foreground mt-1 uppercase tracking-wider">Sessions/j</p>
-        </div>
+      <div className="grid grid-cols-3 gap-4">
+        <Card className="border border-border bg-card group hover:bg-muted/30 transition-all">
+          <CardContent className="p-5 text-center">
+            <div className="w-11 h-11 mx-auto mb-3 rounded-xl bg-primary/10 flex items-center justify-center">
+              <Users className="w-5 h-5 text-primary" />
+            </div>
+            <p className="text-2xl font-bold text-foreground">1,247</p>
+            <p className="text-xs text-muted-foreground mt-1">Joueurs actifs</p>
+          </CardContent>
+        </Card>
+        <Card className="border border-border bg-card group hover:bg-muted/30 transition-all">
+          <CardContent className="p-5 text-center">
+            <div className="w-11 h-11 mx-auto mb-3 rounded-xl bg-accent/10 flex items-center justify-center">
+              <Calendar className="w-5 h-5 text-accent" />
+            </div>
+            <p className="text-2xl font-bold text-foreground">342</p>
+            <p className="text-xs text-muted-foreground mt-1">Matchs/semaine</p>
+          </CardContent>
+        </Card>
+        <Card className="border border-border bg-card group hover:bg-muted/30 transition-all">
+          <CardContent className="p-5 text-center">
+            <div className="w-11 h-11 mx-auto mb-3 rounded-xl bg-yellow-500/10 flex items-center justify-center">
+              <Trophy className="w-5 h-5 text-yellow-500" />
+            </div>
+            <p className="text-2xl font-bold text-foreground">89</p>
+            <p className="text-xs text-muted-foreground mt-1">Sessions/jour</p>
+          </CardContent>
+        </Card>
       </div>
     </div>
   )

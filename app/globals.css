@@ -4,59 +4,58 @@
 
 @layer base {
   :root {
-    /* Padel Squad - Editorial Sport */
-    /* Pure black, warm cream, distinctive salmon accent */
+    /* Padel Squad - Electric Neon Theme */
     
-    --background: 0 0% 2%;
-    --foreground: 35 25% 92%;
+    --background: 240 15% 3%;
+    --foreground: 60 10% 95%;
     
-    --card: 0 0% 6%;
-    --card-foreground: 35 25% 92%;
+    --card: 240 12% 6%;
+    --card-foreground: 60 10% 95%;
     
-    --popover: 0 0% 8%;
-    --popover-foreground: 35 25% 92%;
+    --popover: 240 12% 8%;
+    --popover-foreground: 60 10% 95%;
     
-    /* Primary: Warm Salmon - distinctive, not generic */
-    --primary: 8 72% 62%;
-    --primary-foreground: 0 0% 2%;
+    /* Primary: Electric Lime - comme une balle de padel fluo */
+    --primary: 75 100% 45%;
+    --primary-foreground: 240 15% 3%;
     
-    /* Secondary: Charcoal surface */
-    --secondary: 0 0% 10%;
-    --secondary-foreground: 35 25% 92%;
+    /* Secondary: Deep purple-black surface */
+    --secondary: 260 20% 10%;
+    --secondary-foreground: 60 10% 95%;
     
-    /* Muted: Neutral dark */
-    --muted: 0 0% 14%;
-    --muted-foreground: 0 0% 50%;
+    /* Muted: Purple-tinted dark */
+    --muted: 260 15% 13%;
+    --muted-foreground: 260 10% 55%;
     
-    /* Accent: Forest green - club vibes */
-    --accent: 158 35% 30%;
-    --accent-foreground: 35 25% 92%;
+    /* Accent: Hot Coral - energie et dynamisme */
+    --accent: 12 100% 60%;
+    --accent-foreground: 0 0% 100%;
     
-    --destructive: 0 55% 48%;
-    --destructive-foreground: 35 25% 92%;
+    --destructive: 0 85% 55%;
+    --destructive-foreground: 0 0% 100%;
     
-    --border: 0 0% 15%;
-    --input: 0 0% 12%;
-    --ring: 8 72% 62%;
-    --radius: 0.375rem;
+    --border: 260 15% 15%;
+    --input: 260 15% 12%;
+    --ring: 75 100% 45%;
+    --radius: 0.75rem;
     
-    /* Chart colors */
-    --chart-1: 8 72% 62%;
-    --chart-2: 158 35% 38%;
-    --chart-3: 42 65% 52%;
-    --chart-4: 200 45% 48%;
-    --chart-5: 330 45% 52%;
+    /* Chart colors - neon palette */
+    --chart-1: 75 100% 45%;
+    --chart-2: 12 100% 60%;
+    --chart-3: 180 100% 45%;
+    --chart-4: 45 100% 55%;
+    --chart-5: 280 100% 65%;
     
     /* Semantic colors */
-    --success: 158 40% 38%;
-    --success-foreground: 35 25% 92%;
-    --warning: 42 75% 52%;
-    --warning-foreground: 0 0% 2%;
+    --success: 160 100% 40%;
+    --success-foreground: 0 0% 100%;
+    --warning: 45 100% 55%;
+    --warning-foreground: 0 0% 5%;
     
-    /* Podium colors */
-    --gold: 42 70% 52%;
-    --silver: 0 0% 68%;
-    --bronze: 20 50% 42%;
+    /* Custom brand colors */
+    --gold: 45 100% 55%;
+    --silver: 240 5% 70%;
+    --bronze: 25 90% 50%;
   }
 }
 
@@ -89,6 +88,19 @@
 }
 
 /* Animation classes */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px hsl(var(--primary) / 0.5);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
 @keyframes slide-up {
   from {
     transform: translateY(20px);
