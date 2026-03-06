@@ -1,20 +1,10 @@
 "use client"
 
 import { useState } from "react"
-import { Search, SlidersHorizontal, MapPin, X, Calendar } from "lucide-react"
+import { Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent } from "@/components/ui/card"
 import { SessionCard } from "@/components/session-card"
 import { sessions } from "@/lib/mock-data"
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet"
 import {
   Select,
   SelectContent,
@@ -22,8 +12,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Label } from "@/components/ui/label"
-import { cn } from "@/lib/utils"
 
 const cities = ["Toutes", "Paris", "Lyon", "Marseille", "Bordeaux", "Nice", "Toulouse", "Nantes"]
 const levels = ["Tous", "débutant", "intermédiaire", "avancé", "pro"]
@@ -60,85 +48,71 @@ export function SearchView() {
   return (
     <div className="space-y-6">
       {/* Search header */}
-      <div className="relative">
-        <div className="absolute -top-20 right-0 w-64 h-64 bg-accent/10 rounded-full blur-3xl pointer-events-none" />
-        <h1 className="text-2xl font-bold text-foreground relative">Trouver une session</h1>
-        <p className="text-muted-foreground mt-1 relative">
-          Rejoins une session de padel pres de chez toi
-        </p>
+      <div>
+        <p className="text-sm text-muted-foreground uppercase tracking-wider">Recherche</p>
+        <h1 className="text-3xl font-bold text-foreground mt-1">Sessions</h1>
       </div>
 
       {/* Search and filters */}
-      <Card className="border border-border/50 bg-card/50 backdrop-blur-sm">
-        <CardContent className="p-4">
-          <div className="flex flex-col lg:flex-row gap-4">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Club, ville, joueur..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 bg-muted/50 border-border/50 focus:border-primary/50 focus:ring-primary/20"
-              />
-            </div>
-            <div className="flex gap-3">
-              <Select value={selectedCity} onValueChange={setSelectedCity}>
-                <SelectTrigger className="w-[160px] bg-muted/50 border-border/50">
-                  <MapPin className="w-4 h-4 mr-2 text-muted-foreground" />
-                  <SelectValue placeholder="Ville" />
-                </SelectTrigger>
-                <SelectContent>
-                  {cities.map((city) => (
-                    <SelectItem key={city} value={city}>
-                      {city === "Toutes" ? "Toutes les villes" : city}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+      <div className="flex flex-col lg:flex-row gap-3">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Input
+            placeholder="Club, ville, joueur..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-10 border-border"
+          />
+        </div>
+        <div className="flex gap-2">
+          <Select value={selectedCity} onValueChange={setSelectedCity}>
+            <SelectTrigger className="w-[140px] border-border">
+              <SelectValue placeholder="Ville" />
+            </SelectTrigger>
+            <SelectContent>
+              {cities.map((city) => (
+                <SelectItem key={city} value={city}>
+                  {city === "Toutes" ? "Toutes villes" : city}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
 
-              <Select value={selectedLevel} onValueChange={setSelectedLevel}>
-                <SelectTrigger className="w-[180px] bg-muted/50 border-border/50">
-                  <SelectValue placeholder="Niveau" />
-                </SelectTrigger>
-                <SelectContent>
-                  {levels.map((level) => (
-                    <SelectItem key={level} value={level}>
-                      <span className="capitalize">
-                        {level === "Tous" ? "Tous les niveaux" : level}
-                      </span>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+          <Select value={selectedLevel} onValueChange={setSelectedLevel}>
+            <SelectTrigger className="w-[140px] border-border">
+              <SelectValue placeholder="Niveau" />
+            </SelectTrigger>
+            <SelectContent>
+              {levels.map((level) => (
+                <SelectItem key={level} value={level}>
+                  <span className="capitalize">
+                    {level === "Tous" ? "Tous niveaux" : level}
+                  </span>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
 
-              {hasActiveFilters && (
-                <Button variant="ghost" size="sm" onClick={clearFilters} className="text-muted-foreground">
-                  <X className="w-4 h-4 mr-1" />
-                  Effacer
-                </Button>
-              )}
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+          {hasActiveFilters && (
+            <button onClick={clearFilters} className="text-xs text-muted-foreground hover:text-foreground px-2">
+              Effacer
+            </button>
+          )}
+        </div>
+      </div>
 
       {/* Results header */}
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">
-          {filteredSessions.length} session{filteredSessions.length > 1 ? "s" : ""} disponible{filteredSessions.length > 1 ? "s" : ""}
+          {filteredSessions.length} session{filteredSessions.length > 1 ? "s" : ""}
         </p>
         {hasActiveFilters && (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 text-xs">
             {selectedCity !== "Toutes" && (
-              <Badge variant="secondary" className="gap-1 bg-primary/10 text-primary border border-primary/20">
-                <MapPin className="w-3 h-3" />
-                {selectedCity}
-              </Badge>
+              <span className="px-2 py-1 bg-muted rounded text-foreground">{selectedCity}</span>
             )}
             {selectedLevel !== "Tous" && (
-              <Badge variant="secondary" className="capitalize bg-accent/10 text-accent border border-accent/20">
-                {selectedLevel}
-              </Badge>
+              <span className="px-2 py-1 bg-muted rounded text-foreground capitalize">{selectedLevel}</span>
             )}
           </div>
         )}
@@ -152,20 +126,13 @@ export function SearchView() {
       </div>
 
       {filteredSessions.length === 0 && (
-        <Card className="border border-border/50 bg-card/50 backdrop-blur-sm">
-          <CardContent className="py-12 text-center">
-            <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-primary/10 flex items-center justify-center">
-              <Calendar className="w-8 h-8 text-primary" />
-            </div>
-            <p className="text-lg font-medium text-foreground">Aucune session trouvee</p>
-            <p className="text-muted-foreground mt-1">
-              Essaie de modifier tes criteres de recherche
-            </p>
-            <Button variant="outline" onClick={clearFilters} className="mt-4 border-border/50 hover:bg-muted/50">
-              Reinitialiser les filtres
-            </Button>
-          </CardContent>
-        </Card>
+        <div className="border border-border rounded-md py-12 text-center">
+          <p className="text-foreground font-medium">Aucune session trouvee</p>
+          <p className="text-sm text-muted-foreground mt-1">Modifie tes criteres</p>
+          <button onClick={clearFilters} className="mt-4 text-sm text-primary hover:underline">
+            Reinitialiser
+          </button>
+        </div>
       )}
     </div>
   )

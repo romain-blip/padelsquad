@@ -38,17 +38,16 @@ export function Sidebar({ activeView, onViewChange }: SidebarProps) {
   return (
     <>
       {/* Mobile header */}
-      <header className="lg:hidden fixed top-0 left-0 right-0 h-14 bg-background/95 backdrop-blur-md border-b border-border z-50 flex items-center justify-between px-4">
+      <header className="lg:hidden fixed top-0 left-0 right-0 h-14 bg-background border-b border-border z-50 flex items-center justify-between px-4">
         <Link href="/">
           <Logo size="sm" />
         </Link>
-        <Button
-          variant="ghost"
-          size="icon"
+        <button
           onClick={() => setMobileOpen(!mobileOpen)}
+          className="p-2 text-muted-foreground hover:text-foreground"
         >
           {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </Button>
+        </button>
       </header>
 
       {/* Mobile menu overlay */}
@@ -86,10 +85,10 @@ export function Sidebar({ activeView, onViewChange }: SidebarProps) {
                       setMobileOpen(false)
                     }}
                     className={cn(
-                      "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all",
+                      "w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors",
                       activeView === item.id
-                        ? "bg-primary text-primary-foreground"
-                        : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                        ? "bg-muted text-foreground font-medium"
+                        : "text-muted-foreground hover:text-foreground"
                     )}
                   >
                     <item.icon className="h-5 w-5" />

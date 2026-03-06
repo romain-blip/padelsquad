@@ -1,8 +1,7 @@
 "use client"
 
-import { ChevronRight, Trophy, Target, TrendingUp, Calendar, MapPin } from "lucide-react"
+import { Trophy, Target, MapPin } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { SessionCard } from "@/components/session-card"
 import { sessions, matches, currentUser, leaderboard } from "@/lib/mock-data"
@@ -21,74 +20,34 @@ export function HomeView({ onNavigate }: HomeViewProps) {
   return (
     <div className="space-y-8">
       {/* Welcome header */}
-      <div className="relative">
-        <div className="absolute -top-20 -left-20 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -top-10 right-0 w-48 h-48 bg-accent/5 rounded-full blur-3xl pointer-events-none" />
-        <h1 className="text-2xl font-bold text-foreground relative">
-          Bonjour, {currentUser.name.split(" ")[0]}
+      <div>
+        <p className="text-sm text-muted-foreground uppercase tracking-wider">Bienvenue</p>
+        <h1 className="text-3xl font-bold text-foreground mt-1">
+          {currentUser.name.split(" ")[0]}
         </h1>
-        <p className="text-muted-foreground mt-1 relative">
-          Pret pour ta prochaine session de padel ?
-        </p>
       </div>
 
       {/* Stats cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="border border-border bg-card hover:bg-muted/30 transition-all">
-          <CardContent className="p-5">
-            <div className="flex items-center gap-3">
-              <div className="p-3 rounded-xl bg-primary/10">
-                <Trophy className="w-5 h-5 text-primary" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-foreground">{currentUser.wins}</p>
-                <p className="text-sm text-muted-foreground">Victoires</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className="p-4 border border-border rounded-md bg-card">
+          <p className="text-xs text-muted-foreground uppercase tracking-wider">Victoires</p>
+          <p className="text-3xl font-bold text-foreground mt-1">{currentUser.wins}</p>
+        </div>
 
-        <Card className="border border-border bg-card hover:bg-muted/30 transition-all">
-          <CardContent className="p-5">
-            <div className="flex items-center gap-3">
-              <div className="p-3 rounded-xl bg-accent/10">
-                <Target className="w-5 h-5 text-accent" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-foreground">{winRate}%</p>
-                <p className="text-sm text-muted-foreground">Win rate</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <div className="p-4 border border-border rounded-md bg-card">
+          <p className="text-xs text-muted-foreground uppercase tracking-wider">Win rate</p>
+          <p className="text-3xl font-bold text-foreground mt-1">{winRate}%</p>
+        </div>
 
-        <Card className="border border-border bg-card hover:bg-muted/30 transition-all">
-          <CardContent className="p-5">
-            <div className="flex items-center gap-3">
-              <div className="p-3 rounded-xl bg-yellow-500/10">
-                <TrendingUp className="w-5 h-5 text-yellow-500" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-foreground">#{currentUser.rank}</p>
-                <p className="text-sm text-muted-foreground">Classement</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <div className="p-4 border border-border rounded-md bg-card">
+          <p className="text-xs text-muted-foreground uppercase tracking-wider">Classement</p>
+          <p className="text-3xl font-bold text-primary mt-1">#{currentUser.rank}</p>
+        </div>
 
-        <Card className="border border-border bg-card hover:bg-muted/30 transition-all">
-          <CardContent className="p-5">
-            <div className="flex items-center gap-3">
-              <div className="p-3 rounded-xl bg-primary/10">
-                <Calendar className="w-5 h-5 text-primary" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-foreground">{currentUser.wins + currentUser.losses}</p>
-                <p className="text-sm text-muted-foreground">Matchs joues</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <div className="p-4 border border-border rounded-md bg-card">
+          <p className="text-xs text-muted-foreground uppercase tracking-wider">Matchs</p>
+          <p className="text-3xl font-bold text-foreground mt-1">{currentUser.wins + currentUser.losses}</p>
+        </div>
       </div>
 
       <div className="grid lg:grid-cols-3 gap-8">
@@ -97,11 +56,10 @@ export function HomeView({ onNavigate }: HomeViewProps) {
           {/* Sessions à venir */}
           <section>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-foreground">Sessions disponibles</h2>
-              <Button variant="ghost" size="sm" onClick={() => onNavigate("search")} className="text-primary hover:text-primary">
+              <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Sessions disponibles</h2>
+              <button onClick={() => onNavigate("search")} className="text-xs text-primary hover:underline">
                 Voir tout
-                <ChevronRight className="w-4 h-4 ml-1" />
-              </Button>
+              </button>
             </div>
             <div className="space-y-3">
               {upcomingSessions.map((session) => (
@@ -113,11 +71,10 @@ export function HomeView({ onNavigate }: HomeViewProps) {
           {/* Recent Activity */}
           <section>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-foreground">Activité récente</h2>
-              <Button variant="ghost" size="sm" onClick={() => onNavigate("profile")} className="text-primary hover:text-primary">
+              <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Activite recente</h2>
+              <button onClick={() => onNavigate("profile")} className="text-xs text-primary hover:underline">
                 Historique
-                <ChevronRight className="w-4 h-4 ml-1" />
-              </Button>
+              </button>
             </div>
             <Card className="border border-border bg-card">
               <CardContent className="p-0 divide-y divide-border">
@@ -179,11 +136,10 @@ export function HomeView({ onNavigate }: HomeViewProps) {
           {/* Classement */}
           <section>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-foreground">Classement</h2>
-              <Button variant="ghost" size="sm" onClick={() => onNavigate("ranking")} className="text-primary hover:text-primary">
+              <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Classement</h2>
+              <button onClick={() => onNavigate("ranking")} className="text-xs text-primary hover:underline">
                 Voir tout
-                <ChevronRight className="w-4 h-4 ml-1" />
-              </Button>
+              </button>
             </div>
             <Card className="border border-border bg-card">
               <CardContent className="p-0 divide-y divide-border">
@@ -230,28 +186,21 @@ export function HomeView({ onNavigate }: HomeViewProps) {
           </section>
 
           {/* Quick actions */}
-          <Card className="border border-border bg-card">
-            <CardContent className="p-5">
-              <h3 className="font-semibold text-foreground mb-4">Actions rapides</h3>
-              <div className="space-y-3">
-                <Button 
-                  className="w-full justify-start bg-primary hover:bg-primary/90 text-primary-foreground" 
-                  onClick={() => onNavigate("create")}
-                >
-                  <Calendar className="w-4 h-4 mr-2" />
-                  Creer une session
-                </Button>
-                <Button 
-                  variant="outline" 
-                  className="w-full justify-start border-border hover:bg-muted"
-                  onClick={() => onNavigate("search")}
-                >
-                  <Target className="w-4 h-4 mr-2" />
-                  Trouver des partenaires
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+          <div className="space-y-3">
+            <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Actions</h3>
+            <button 
+              className="w-full p-4 text-left border border-border rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors" 
+              onClick={() => onNavigate("create")}
+            >
+              <span className="font-semibold">Creer une session</span>
+            </button>
+            <button 
+              className="w-full p-4 text-left border border-border rounded-md hover:bg-muted transition-colors"
+              onClick={() => onNavigate("search")}
+            >
+              <span className="font-medium text-foreground">Trouver des partenaires</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
